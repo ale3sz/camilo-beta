@@ -13,10 +13,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
 
-  <!-- React 18 & Babel -->
+  <!-- React 18, Babel & Lottie-Web (para animaciones exportadas de AniCraft) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 
   <style>
     :root {
@@ -93,13 +94,88 @@
     .animate-fade-up {
       animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
+
+    @keyframes slowSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .spin-slow {
+      animation: slowSpin 18s linear infinite;
+    }
+    .spin-slow:hover {
+      animation-duration: 7s;
+    }
+
+    @keyframes kenBurnsSunset {
+      0%, 100% { transform: scale(1.0); }
+      50% { transform: scale(1.07); }
+    }
+    .sunset-kenburns {
+      animation: kenBurnsSunset 11s ease-in-out infinite;
+    }
   </style>
 </head>
 <body class="selection:bg-[#E86A1C] selection:text-white">
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState } = React;
+    const { useState, useEffect, useRef } = React;
+
+    // Reusable AniCraft Lottie Player Component
+    function AniCraftLottie({ src, className = '', speed = 1 }) {
+      const containerRef = useRef(null);
+      useEffect(() => {
+        if (!containerRef.current || !window.lottie) return;
+        const anim = window.lottie.loadAnimation({
+          container: containerRef.current,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path: src,
+        });
+        anim.setSpeed(speed);
+        return () => anim.destroy();
+      }, [src, speed]);
+      return <div ref={containerRef} className={className} />;
+    }
+
+    // Editorial Rotating Circular Bakery Stamp (VectorCraft + AniCraft)
+    function CamiloRotatingSeal() {
+      return (
+        <div
+          className="relative w-[108px] h-[108px] sm:w-[124px] sm:h-[124px] select-none pointer-events-auto group"
+          title="100% Recién Horneado · Tamaño Real XXL"
+        >
+          {/* AniCraft Lottie Base Layer */}
+          <AniCraftLottie
+            src="assets/animations/hero_xxl_seal.json"
+            speed={0.65}
+            className="w-full h-full drop-shadow-[0_6px_14px_rgba(0,0,0,0.35)]"
+          />
+          {/* Crisp Curved Circular Typography Overlay (VectorCraft spec) */}
+          <svg
+            viewBox="0 0 220 220"
+            className="absolute inset-0 w-full h-full spin-slow pointer-events-none"
+            aria-hidden="true"
+          >
+            <defs>
+              <path id="camiloSealPath" d="M 110,110 m -79,0 a 79,79 0 1,1 158,0 a 79,79 0 1,1 -158,0" />
+            </defs>
+            <text
+              fill="#FAF6F0"
+              fontSize="12.2"
+              fontWeight="800"
+              letterSpacing="2.8"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+            >
+              <textPath href="#camiloSealPath" startOffset="2%">
+                • RECIÉN HORNEADO • TAMAÑO REAL • 500CC
+              </textPath>
+            </text>
+          </svg>
+        </div>
+      );
+    }
 
     // ========================================================================
     // CURATED HIGH-RES STUDIO MENU (100% Real Camilo Dishes & Custom Ceramic Photos)
@@ -359,8 +435,18 @@
       const [activeTab, setActiveTab] = useState('icono-xxl');
       const [selectedGoal, setSelectedGoal] = useState('rave');
       const [selectedBranch, setSelectedBranch] = useState('Médicos de Funes 1685 (Funes)');
-      const [people, setPeople] = useState('6 personas');
-      const [hour, setHour] = useState('Viernes 18:30 hs');
+      const [peopleCount, setPeopleCount] = useState(4);
+      const [selectedDay, setSelectedDay] = useState('Viernes');
+      const [selectedHour, setSelectedHour] = useState('18:30 hs');
+
+      const peopleLabel = peopleCount === 1 ? '1 persona' : `${peopleCount} personas`;
+      const fullSchedule = `${selectedDay} ${selectedHour}`;
+
+      const DAYS_OF_WEEK = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+      const HOUR_SLOTS = [
+        '08:30 hs', '09:30 hs', '10:30 hs', '12:00 hs', '13:00 hs',
+        '15:00 hs', '17:00 hs', '18:00 hs', '18:30 hs', '19:30 hs', '20:30 hs'
+      ];
 
       const items = MENU_SHOWCASE[activeTab] || MENU_SHOWCASE['icono-xxl'];
       const currentCategory = CATEGORIES.find((c) => c.id === activeTab) || CATEGORIES[0];
@@ -370,13 +456,13 @@
         <div className="min-h-screen flex flex-col">
 
           {/* ==================================================================
-              1. TOP STATUS BAR (Horarios limpios arriba)
+              1. TOP STATUS BAR (Horarios limpios arriba · 100% responsive mobile)
           ================================================================== */}
-          <div className="bg-[#111111] text-[#F3ECE1] text-[12px] py-2 px-5 sm:px-10">
-            <div className="max-w-[1360px] mx-auto flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2 font-semibold whitespace-nowrap">
-                <span className="w-2 h-2 rounded-full bg-[#25B456] inline-block" />
-                <span>ROSARIO & FUNES · Abierto todos los días desde las 08:00 hs</span>
+          <div className="bg-[#111111] text-[#F3ECE1] text-[11px] sm:text-[12px] py-2 px-4 sm:px-10">
+            <div className="max-w-[1360px] mx-auto flex items-center justify-center md:justify-between gap-4">
+              <div className="flex items-center gap-2 font-semibold text-center sm:text-left">
+                <span className="w-2 h-2 rounded-full bg-[#25B456] inline-block flex-shrink-0" />
+                <span>ROSARIO & FUNES · Abierto todos los días desde 08:00 hs</span>
               </div>
               <div className="hidden md:flex items-center gap-6 text-[#CFC6B8] font-medium whitespace-nowrap">
                 <span>Promos Tentación: <strong className="text-white">Lun a Vie hasta 16 hs</strong></span>
@@ -483,25 +569,37 @@
                     </a>
                   </div>
 
-                  {/* Quick Proof Metrics */}
-                  <div className="mt-6 pt-4 border-t border-[#111111]/15 grid grid-cols-3 gap-4 max-w-[490px]">
-                    <div>
-                      <div className="font-display text-[22px] sm:text-[25px] text-[#111111]">500cc</div>
-                      <div className="text-[12px] font-bold text-[#5A5248]">Tazón insignia bicolor</div>
+                  {/* Quick Proof Metrics (Limpio en 390px y PC) */}
+                  <div className="mt-6 pt-4 border-t border-[#111111]/15 grid grid-cols-3 gap-2.5 sm:gap-4 max-w-[490px]">
+                    <div className="flex items-center gap-1.5 sm:gap-2.5">
+                      <AniCraftLottie
+                        src="assets/animations/coffee_steam.json"
+                        speed={0.85}
+                        className="hidden sm:block w-10 h-10 flex-shrink-0 -ml-1"
+                      />
+                      <div>
+                        <div className="font-display text-[20px] sm:text-[25px] text-[#111111] leading-none">500cc</div>
+                        <div className="text-[11px] sm:text-[11.5px] font-bold text-[#5A5248] mt-1">Tazón bicolor</div>
+                      </div>
                     </div>
                     <div>
-                      <div className="font-display text-[22px] sm:text-[25px] text-[#E86A1C]">4 Casas</div>
-                      <div className="text-[12px] font-bold text-[#5A5248]">Rosario & Funes</div>
+                      <div className="font-display text-[20px] sm:text-[25px] text-[#E86A1C] leading-none">4 Casas</div>
+                      <div className="text-[11px] sm:text-[12px] font-bold text-[#5A5248] mt-1">Rosario & Funes</div>
                     </div>
                     <div>
-                      <div className="font-display text-[22px] sm:text-[25px] text-[#111111]">+107K</div>
-                      <div className="text-[12px] font-bold text-[#5A5248]">Seguidores reales</div>
+                      <div className="font-display text-[20px] sm:text-[25px] text-[#111111] leading-none">+107K</div>
+                      <div className="text-[11px] sm:text-[12px] font-bold text-[#5A5248] mt-1">Seguidores</div>
                     </div>
                   </div>
                 </div>
 
                 {/* Right Hero Visual Showcase (6 Cols) */}
                 <div className="lg:col-span-6 relative">
+                  {/* Animated VectorCraft + AniCraft Circular Bakery Stamp */}
+                  <div className="hidden sm:block absolute -top-6 -right-4 z-20">
+                    <CamiloRotatingSeal />
+                  </div>
+
                   <div className="relative rounded-[26px] overflow-hidden border-[2.5px] border-[#111111] shadow-[0_10px_0_#111111] bg-[#223A36] aspect-[4/3]">
                     <img
                       src="assets/menu/01_croissant_pistacho_xxl.jpg"
@@ -511,16 +609,16 @@
                     <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent pointer-events-none" />
 
                     {/* Floating Authentic Dish Tag */}
-                    <div className="absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-5 sm:right-5 flex items-end justify-between gap-3">
-                      <div className="bg-[#FAF6F0]/95 backdrop-blur-md border-[2px] border-[#111111] rounded-2xl px-4 py-2.5 shadow-lg">
-                        <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#E86A1C] block">
+                    <div className="absolute bottom-3 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-5 flex items-end justify-between gap-2 sm:gap-3">
+                      <div className="bg-[#FAF6F0]/95 backdrop-blur-md border-[2px] border-[#111111] rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 shadow-lg min-w-0">
+                        <span className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-[#E86A1C] block">
                           .EL MÁS VIRAL DE ROSARIO.
                         </span>
-                        <span className="text-[15.5px] sm:text-[17.5px] font-extrabold text-[#111111] leading-tight block mt-0.5">
+                        <span className="text-[13.5px] sm:text-[17.5px] font-extrabold text-[#111111] leading-tight block mt-0.5">
                           Croissant XXL Pistacho & Pastelera
                         </span>
                       </div>
-                      <div className="font-price flex-shrink-0 bg-[#111111] text-white text-[20px] sm:text-[22px] font-bold px-5 py-2 rounded-full border-2 border-white/20 shadow-xl">
+                      <div className="font-price flex-shrink-0 bg-[#111111] text-white text-[16px] sm:text-[22px] font-bold px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full border-2 border-white/20 shadow-xl">
                         $15.000
                       </div>
                     </div>
@@ -576,8 +674,8 @@
                   </h2>
                 </div>
 
-                <div className="inline-flex items-center gap-2 bg-[#FAF6F0] border-[1.75px] border-[#111111] rounded-full px-4 py-2 text-[13px] font-extrabold shadow-[0_2px_0_#111111] self-start lg:self-auto whitespace-nowrap">
-                  <span className="w-2 h-2 rounded-full bg-[#E86A1C]" />
+                <div className="inline-flex flex-wrap items-center gap-2 bg-[#FAF6F0] border-[1.75px] border-[#111111] rounded-2xl sm:rounded-full px-4 py-2 text-[12px] sm:text-[13px] font-extrabold shadow-[0_2px_0_#111111] self-start lg:self-auto">
+                  <span className="w-2 h-2 rounded-full bg-[#E86A1C] flex-shrink-0" />
                   <span className="text-[#5A5248]">Franja activa:</span>
                   <span className="text-[#111111]">{currentCategory.hours}</span>
                 </div>
@@ -617,11 +715,11 @@
                         alt={dish.title}
                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                       />
-                      <div className="absolute inset-x-0 top-0 p-4 flex items-center justify-between gap-2">
-                        <span className="bg-[#FAF6F0]/95 backdrop-blur-xs text-[#111111] border-[1.5px] border-[#111111] text-[10.5px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm whitespace-nowrap">
+                      <div className="absolute inset-x-0 top-0 p-3 sm:p-4 flex items-center justify-between gap-2">
+                        <span className="bg-[#FAF6F0]/95 backdrop-blur-xs text-[#111111] border-[1.5px] border-[#111111] text-[9.5px] sm:text-[10.5px] font-extrabold uppercase tracking-wider px-2.5 sm:px-3 py-1 rounded-full shadow-sm truncate max-w-[64%]">
                           {dish.badge}
                         </span>
-                        <span className="bg-[#111111]/85 backdrop-blur-xs text-white text-[11px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                        <span className="bg-[#111111]/85 backdrop-blur-xs text-white text-[10px] sm:text-[11px] font-bold px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap flex-shrink-0">
                           {dish.time}
                         </span>
                       </div>
@@ -734,26 +832,36 @@
                   </div>
                 </div>
 
-                {/* Right Editorial Cocktail Photo */}
-                <div className="lg:col-span-6">
-                  <div className="relative rounded-[26px] overflow-hidden border-2 border-white/20 shadow-2xl aspect-[4/3]">
+                {/* Right Editorial Cocktail Cinemagraph Loop (AniCraft + FilmCraft) + Animated Vinyl */}
+                <div className="lg:col-span-6 relative">
+                  {/* Animated AniCraft Spinning Vinyl + Expanding Sunset Soundwave */}
+                  <div className="hidden sm:block absolute -top-9 -right-5 z-20 w-[104px] h-[104px] drop-shadow-[0_10px_24px_rgba(232,106,28,0.35)]">
+                    <AniCraftLottie
+                      src="assets/animations/sunset_rave_vinyl.json"
+                      speed={0.85}
+                      className="w-full h-full"
+                    />
+                  </div>
+
+                  <div className="relative rounded-[26px] overflow-hidden border-2 border-white/20 shadow-2xl aspect-[4/3] bg-[#111111]">
                     <img
                       src="assets/menu/06_tragos_sunset_rave.jpg"
                       alt="Tragos Sunset Coffee Rave Camilo"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover sunset-kenburns"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
-                    <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-4">
-                      <div>
-                        <div className="text-xs font-extrabold uppercase tracking-widest text-[#E86A1C]">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent pointer-events-none" />
+                    <div className="absolute bottom-3.5 left-3.5 right-3.5 sm:bottom-5 sm:left-5 sm:right-5 flex items-end sm:items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-[#E86A1C]">
                           BARRA CAMILO · COPONES 500ML
                         </div>
-                        <div className="text-lg sm:text-xl font-extrabold text-white">
+                        <div className="text-[15px] sm:text-xl font-extrabold text-white leading-tight mt-0.5">
                           Aperol Spritz · Gin Tonic · Cynar · Fernet
                         </div>
                       </div>
-                      <span className="whitespace-nowrap bg-white/15 backdrop-blur-md text-white text-xs font-extrabold px-3.5 py-1.5 rounded-full border border-white/20">
-                        DJ Set Live
+                      <span className="flex-shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 sm:gap-2 bg-white/15 backdrop-blur-md text-white text-[10.5px] sm:text-xs font-extrabold px-3 sm:px-3.5 py-1.5 rounded-full border border-white/20">
+                        <span className="w-2 h-2 rounded-full bg-[#E86A1C] animate-pulse" />
+                        <span>DJ Set Live</span>
                       </span>
                     </div>
                   </div>
@@ -855,47 +963,85 @@
                     </div>
                   </div>
 
-                  {/* 3. Personas y horario (100% Custom Styled Pills — Zero native OS ugly select widgets) */}
+                  {/* 3. Personas, Día y Horario (Real Stepper 1..30 + 7 días + franja horaria libre) */}
                   <div className="mt-7">
-                    <h3 className="text-[15.5px] font-extrabold text-[#111111] mb-3">
-                      3. Cantidad de personas y horario
+                    <h3 className="text-[15.5px] font-extrabold text-[#111111] mb-3.5">
+                      3. Cantidad de personas, día y horario
                     </h3>
-                    <div className="space-y-2.5">
-                      <div className="flex flex-wrap gap-2">
-                        {['2 personas', '4 personas', '6 personas', '8 personas', '12+ Grupo'].map((p) => {
-                          const active = people === p;
-                          return (
-                            <button
-                              key={p}
-                              type="button"
-                              onClick={() => setPeople(p)}
-                              className={`whitespace-nowrap px-4 py-2 rounded-full text-[13px] font-extrabold border-[2px] border-[#111111] transition-all cursor-pointer ${
-                                active
-                                  ? 'bg-[#E86A1C] text-white shadow-[0_2px_0_#111111]'
-                                  : 'bg-[#FAF6F0] text-[#111111] hover:bg-[#E8DFD1]'
-                              }`}
-                            >
-                              {p}
-                            </button>
-                          );
-                        })}
+
+                    <div className="space-y-4">
+                      {/* Row A: Tactile Stepper (− N personas +) + Hour Stepper */}
+                      <div className="flex flex-wrap items-center gap-3">
+                        <div className="inline-flex items-center bg-[#FAF6F0] border-[2px] border-[#111111] rounded-full p-1 shadow-[0_3px_0_#111111]">
+                          <button
+                            type="button"
+                            onClick={() => setPeopleCount((c) => Math.max(1, c - 1))}
+                            aria-label="Restar una persona"
+                            className="w-9 h-9 rounded-full bg-[#E8DFD1] hover:bg-[#111111] hover:text-white text-[#111111] font-black text-lg flex items-center justify-center transition-colors cursor-pointer"
+                          >
+                            −
+                          </button>
+                          <span className="px-4 text-[14px] font-extrabold text-[#111111] min-w-[112px] text-center select-none">
+                            {peopleLabel}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setPeopleCount((c) => Math.min(30, c + 1))}
+                            aria-label="Sumar una persona"
+                            className="w-9 h-9 rounded-full bg-[#E86A1C] hover:bg-[#CC560E] text-white font-black text-lg flex items-center justify-center transition-colors cursor-pointer"
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        {/* Time Picker Stepper (− HH:MM +) */}
+                        <div className="inline-flex items-center bg-[#FAF6F0] border-[2px] border-[#111111] rounded-full p-1 shadow-[0_3px_0_#111111]">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const idx = HOUR_SLOTS.indexOf(selectedHour);
+                              const prev = idx > 0 ? idx - 1 : HOUR_SLOTS.length - 1;
+                              setSelectedHour(HOUR_SLOTS[prev]);
+                            }}
+                            aria-label="Horario anterior"
+                            className="w-9 h-9 rounded-full bg-[#E8DFD1] hover:bg-[#111111] hover:text-white text-[#111111] font-black text-sm flex items-center justify-center transition-colors cursor-pointer"
+                          >
+                            ‹
+                          </button>
+                          <span className="px-4 text-[14px] font-extrabold text-[#111111] min-w-[96px] text-center select-none">
+                            {selectedHour}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const idx = HOUR_SLOTS.indexOf(selectedHour);
+                              const next = idx < HOUR_SLOTS.length - 1 ? idx + 1 : 0;
+                              setSelectedHour(HOUR_SLOTS[next]);
+                            }}
+                            aria-label="Siguiente horario"
+                            className="w-9 h-9 rounded-full bg-[#111111] hover:bg-[#E86A1C] text-white font-black text-sm flex items-center justify-center transition-colors cursor-pointer"
+                          >
+                            ›
+                          </button>
+                        </div>
                       </div>
 
+                      {/* Row B: All 7 Days of the Week */}
                       <div className="flex flex-wrap gap-2">
-                        {['Viernes 18:30 hs', 'Viernes 19:30 hs', 'Sábado 10:00 hs', 'Sábado 17:30 hs', 'Lun a Vie 13:00 hs'].map((h) => {
-                          const active = hour === h;
+                        {DAYS_OF_WEEK.map((day) => {
+                          const active = selectedDay === day;
                           return (
                             <button
-                              key={h}
+                              key={day}
                               type="button"
-                              onClick={() => setHour(h)}
-                              className={`whitespace-nowrap px-4 py-2 rounded-full text-[13px] font-extrabold border-[2px] border-[#111111] transition-all cursor-pointer ${
+                              onClick={() => setSelectedDay(day)}
+                              className={`whitespace-nowrap px-3.5 py-2 rounded-full text-[12.5px] font-extrabold border-[2px] border-[#111111] transition-all cursor-pointer ${
                                 active
                                   ? 'bg-[#111111] text-white shadow-[0_2px_0_#E86A1C]'
                                   : 'bg-[#FAF6F0] text-[#111111] hover:bg-[#E8DFD1]'
                               }`}
                             >
-                              {h}
+                              {day}
                             </button>
                           );
                         })}
@@ -929,17 +1075,17 @@
 
                     <div className="relative bg-[#F3ECE1] text-[#111111] rounded-[16px] rounded-bl-[4px] p-4 text-[14.5px] leading-[1.48] shadow">
                       Hola Camilo! Quiero coordinar <strong>{activeGoalObj.msgText}</strong> en{' '}
-                      <strong>{selectedBranch}</strong> ({hour}). Somos <strong>{people}</strong>. ¡Muchas gracias!
+                      <strong>{selectedBranch}</strong> ({fullSchedule}). Somos <strong>{peopleLabel}</strong>. ¡Muchas gracias!
                     </div>
 
                     <a
                       href="#reservas"
                       onClick={(e) => {
                         e.preventDefault();
-                        const text = `Hola Camilo! Quiero coordinar ${activeGoalObj.msgText} en ${selectedBranch} (${hour}). Somos ${people}. Muchas gracias!`;
+                        const text = `Hola Camilo! Quiero coordinar ${activeGoalObj.msgText} en ${selectedBranch} (${fullSchedule}). Somos ${peopleLabel}. Muchas gracias!`;
                         window.open(`https://wa.me/5493410000000?text=${encodeURIComponent(text)}`, '_blank');
                       }}
-                      className="mt-4 w-full whitespace-nowrap bg-[#25B456] hover:bg-[#1E9B49] text-white font-extrabold text-[15px] sm:text-[15.5px] py-3.5 px-6 rounded-full flex items-center justify-center gap-2 shadow-[0_6px_22px_rgba(37,180,86,0.35)] transition-all cursor-pointer"
+                      className="mt-4 w-full bg-[#25B456] hover:bg-[#1E9B49] text-white font-extrabold text-[13.5px] sm:text-[15.5px] py-3.5 px-4 sm:px-6 rounded-full flex items-center justify-center gap-2 text-center shadow-[0_6px_22px_rgba(37,180,86,0.35)] transition-all cursor-pointer"
                     >
                       <span>Abrir WhatsApp con este mensaje listo</span>
                       <span aria-hidden="true">→</span>
