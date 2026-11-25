@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Camilo Café Artesanal — Carta XXL, Sunset Coffee Rave & 4 Casas (Rosario y Funes)</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
+
+  <!-- React 18 & Babel -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    :root {
+      --cream-bg: #F3ECE1;
+      --cream-card: #FAF6F0;
+      --cream-warm: #E8DFD1;
+      --ink: #111111;
+      --ink-muted: #4A443D;
+      --orange: #E86A1C;
+      --orange-deep: #CC560E;
+      --sage: #6F8674;
+      --teal-plate: #223A36;
+      --whatsapp-green: #25B456;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background-color: var(--cream-bg);
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .font-display {
+      font-family: 'Archivo Black', 'Impact', sans-serif;
+      letter-spacing: -0.03em;
+    }
+
+    .font-editorial {
+      font-family: 'Instrument Serif', Georgia, serif;
+    }
+
+    .font-price {
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: -0.03em;
+    }
+
+    /* Tactile Neo-Editorial Card Lift */
+    .editorial-card {
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .editorial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 0 #111111;
+    }
+
+    /* Infinite Marquee Animation */
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeScroll 32s linear infinite;
+    }
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    /* Subtle warm grain texture */
+    .warm-grain {
+      background-image: radial-gradient(rgba(17, 17, 17, 0.03) 1px, transparent 0);
+      background-size: 22px 22px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-up {
+      animation: fadeUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  </style>
+</head>
+<body class="warm-grain selection:bg-[#E86A1C] selection:text-white">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // ========================================================================
+    // CURATED HIGH-RES STUDIO MENU (100% Real Camilo Dishes & Custom Ceramic Photos)
+    // ========================================================================
+    const CATEGORIES = [
+      {
+        id: 'icono-xxl',
+        label: '.DESAYUNOS Y MERIENDAS XXL.',
+        hours: 'Todos los días · 08:00 al cierre',
+      },
+      {
+        id: 'tentacion',
+        label: '.PROMOS L a V (hasta 16hs).',
+        hours: 'Lunes a Viernes · 08:00 a 16:00 hs',
+      },
+      {
+        id: 'almuerzos',
+        label: '.GOURMET XL & ALMUERZOS.',
+        hours: 'Lunes a Sábados · 11:00 a 16:00 hs',
+      },
+      {
+        id: 'tardecita',
+        label: '.LICUADOS, TRAGOS Y 5 LITROS.',
+        hours: 'Todo el día · Sunset & Para Llevar',
+      },
+    ];
+
+    const MENU_SHOWCASE = {
+      'icono-xxl': [
+        {
+          id: 'croissant-pistacho',
+          badge: 'ÍCONO VIRAL · COMEN 2',
+          time: 'Todo el día',
+          title: 'Croissant XXL Pistacho & Pastelera',
+          desc: 'Doble tamaño real recién horneado, coronado mitad crema de pistacho artesanal y mitad pastelera tibia sobre tazón de 500cc.',
+          price: '$15.000',
+          image: 'assets/menu/01_croissant_pistacho_xxl.jpg',
+          featured: true,
+        },
+        {
+          id: 'camilo-power-libre',
+          badge: 'TENEDOR Y TAZÓN LIBRE',
+          time: 'Desayuno y Merienda',
+          title: 'Camilo Power Libre',
+          desc: 'Tazón de cerámica de 500cc libre + facturas y medialunas de manteca libres + vaso de exprimido natural libre.',
+          price: '$27.000',
+          image: 'assets/menu/02_camilo_power_libre.jpg',
+        },
+        {
+          id: 'toston-compartir',
+          badge: 'PARA 2 O 3 PERSONAS',
+          time: 'Brunch todo el día',
+          title: 'Tostón Camilo XXL para Compartir',
+          desc: 'Base gigante de croissant abierta con palta fresca, dos huevos de campo y cherrys confitados + 2 Tazones 500cc + 2 Exprimidos.',
+          price: '$37.000',
+          image: 'assets/menu/04_toston_compartir_xxl.jpg',
+        },
+        {
+          id: 'camilo-revuelto',
+          badge: 'BRUNCH COMPLETO',
+          time: 'Todo el día',
+          title: 'Desayuno Camilo Revuelto',
+          desc: 'Bowl de huevos revueltos cremosos + 3 cazuelitas (palta, queso crema y cherrys) + Tazón 500cc + Jugo exprimido.',
+          price: '$17.500',
+          image: 'assets/menu/03_camilo_revuelto.jpg',
+        },
+      ],
+      'tentacion': [
+        {
+          id: 'tentacion-jarrita',
+          badge: 'IMBATIBLE DE SEMANA',
+          time: 'Lun a Vie hasta 16 hs',
+          title: 'Tentación del Día XL',
+          desc: 'Café cortado o doble en jarrita de vidrio + Medialuna XXL tibia bañada en almíbar suave.',
+          price: '$7.500',
+          image: 'assets/menu/09_tentacion_jarrita_medialuna.jpg',
+          featured: true,
+        },
+        {
+          id: 'medialuna-jyq',
+          badge: 'SALADO PRENSADO XXL',
+          time: 'Lun a Vie hasta 16 hs',
+          title: 'Tentación Salada Jamón & Queso',
+          desc: 'Medialuna gigante dorada al horno desbordando queso fundido y jamón cocido natural + Tazón 500cc con latte art.',
+          price: '$13.800',
+          image: 'assets/menu/10_medialuna_jyq_salada.jpg',
+        },
+        {
+          id: 'revuelto-semana',
+          badge: 'PROTEICO & FRESCO',
+          time: 'Lun a Vie hasta 16 hs',
+          title: 'Combo Revuelto + Tazón 500cc',
+          desc: 'Huevos revueltos en cerámica verde oliva con dips de palta, cherrys y queso crema + Tazón de medio litro.',
+          price: '$17.500',
+          image: 'assets/menu/03_camilo_revuelto.jpg',
+        },
+        {
+          id: 'power-merienda',
+          badge: 'MESA DULCE COMPLETA',
+          time: 'Lun a Vie hasta 16 hs',
+          title: 'Combo Facturas XXL & Exprimido',
+          desc: 'Selección de bollería hojaldrada con dulce de leche, tazón de 500cc y exprimido de naranja recién hecho.',
+          price: '$15.500',
+          image: 'assets/menu/02_camilo_power_libre.jpg',
+        },
+      ],
+      'almuerzos': [
+        {
+          id: 'gourmet-xl-pollo',
+          badge: 'INCLUYE BEBIDA + CAFÉ CHICO',
+          time: 'Lun a Sáb 11 a 16 hs',
+          title: 'Gourmet XL: Pollo Barbacoa',
+          desc: 'Croissant gigante relleno de pollo rebozado en barbacoa, cherrys confitados y cebolla caramelizada. Incluye jugo o bebida + café.',
+          price: '$15.000',
+          image: 'assets/menu/05_gourmet_xl_almuerzo.jpg',
+          featured: true,
+        },
+        {
+          id: 'toston-almuerzo',
+          badge: 'OPCIÓN VEGGIE XXL',
+          time: '11:00 a 16:00 hs',
+          title: 'Croissant Abierto Palta & Huevo',
+          desc: 'Hojaldre artesanal tibio con abanico de palta, huevos a la plancha, tomates cherry asados y brotes frescos.',
+          price: '$16.500',
+          image: 'assets/menu/04_toston_compartir_xxl.jpg',
+        },
+        {
+          id: 'croissant-jyq-almuerzo',
+          badge: 'CLÁSICO CALIENTE',
+          time: '11:00 a 16:00 hs',
+          title: 'Croissant XXL Jamón Natural & Tybo',
+          desc: 'Doble capa de jamón natural seleccionado y mucho queso fundido en masa de manteca recién horneada.',
+          price: '$14.200',
+          image: 'assets/menu/10_medialuna_jyq_salada.jpg',
+        },
+        {
+          id: 'brunch-mediodia',
+          badge: 'LIVIANO & COMPLETO',
+          time: '11:00 a 16:00 hs',
+          title: 'Brunch Camilo de Mediodía',
+          desc: 'Revuelto cremoso de campo con trío de cazuelitas frescas, vaso de exprimido de naranja y café de especialidad.',
+          price: '$17.500',
+          image: 'assets/menu/03_camilo_revuelto.jpg',
+        },
+      ],
+      'tardecita': [
+        {
+          id: 'licuados-iced-coffee',
+          badge: 'NUEVA CARTA DE PRIMAVERA',
+          time: 'Todo el día',
+          title: 'Licuados 500ml & Coffee Nutella',
+          desc: 'Frutilla Pistacho, Frutella, Banana Split (500ml), cafés helados marmolados con Nutella y milhojas de frutillas frescas.',
+          price: '$8.500',
+          image: 'assets/menu/07_licuados_iced_coffee.jpg',
+          featured: true,
+        },
+        {
+          id: 'tragos-sunset',
+          badge: 'COPONES 500ML · AFTER OFFICE',
+          time: 'Desde las 18:00 hs',
+          title: 'Aperol Spritz, Gin Beefeater & Cynar',
+          desc: 'Aperol con Salentein Extra Brut, Gin Tonic Beefeater con cítricos y Cynar con pomelo rosado tirados en barra.',
+          price: '$9.500',
+          image: 'assets/menu/06_tragos_sunset_rave.jpg',
+        },
+        {
+          id: 'exprimidos-bidon-5l',
+          badge: '500ML · 1 LITRO · BIDÓN 5L',
+          time: 'Para llevar & Mayorista',
+          title: 'Jugo de Naranja Recién Exprimido',
+          desc: '100% naranja pura exprimida en el día sin azúcar ni conservantes. Botellas individuales y el icónico bidón de 5 litros.',
+          price: '$24.000',
+          image: 'assets/menu/08_exprimido_bidon_naranja.jpg',
+        },
+        {
+          id: 'croissant-pistacho-tarde',
+          badge: 'EL REY DE LA MERIENDA',
+          time: 'Merienda XXL',
+          title: 'Croissant XXL Dúo de Cremas',
+          desc: 'Para cucharear o mojar directo en nuestro tazón de 500cc: mitad pistacho tostado y mitad crema pastelera.',
+          price: '$15.000',
+          image: 'assets/menu/01_croissant_pistacho_xxl.jpg',
+        },
+      ],
+    };
+
+    const BOOKING_CARDS = [
+      {
+        id: 'rave',
+        title: 'Sunset Coffee Rave',
+        sub: 'Viernes 18 hs · DJ en vivo',
+        msgText: 'mesa para el Sunset Coffee Rave de este viernes 18:00 hs',
+        img: 'assets/menu/06_tragos_sunset_rave.jpg',
+        caption: 'SUNSET COFFEE RAVE · VIERNES 18 HS',
+      },
+      {
+        id: 'grupos',
+        title: 'Despedidas y Grupos',
+        sub: 'Cumpleaños y equipos',
+        msgText: 'mesa grupal para festejo / despedida',
+        img: 'assets/menu/04_toston_compartir_xxl.jpg',
+        caption: 'MESAS GRUPALES SIN ESPERAR EN DM',
+      },
+      {
+        id: 'bidon',
+        title: 'Bidón 5L y Congelados',
+        sub: 'Retiro o pedido mayorista',
+        msgText: 'encargo de Bidón 5L de Exprimido / Bollería congelada',
+        img: 'assets/menu/08_exprimido_bidon_naranja.jpg',
+        caption: 'JUGO 5 LITROS & CONGELADOS EN CASA',
+      },
+      {
+        id: 'gift',
+        title: 'Gift Cards & Merch',
+        sub: 'Tarjetas regalo y juegos',
+        msgText: 'una Gift Card de regalo / Merchandising Camilo',
+        img: 'assets/menu/01_croissant_pistacho_xxl.jpg',
+        caption: 'REGALÁ UN DESAYUNO O MERIENDA XXL',
+      },
+    ];
+
+    const SUCURSALES = [
+      {
+        num: '01',
+        name: 'Pte. Roca 1259',
+        area: 'Rosario Centro · Casa Madre',
+        hours: 'Lun a Dom · 08:00 a 21:00 hs',
+        badge: 'Casa Matriz',
+        accent: false,
+      },
+      {
+        num: '02',
+        name: 'Mendoza y Lavalle',
+        area: 'Barrio Echesortu · Esquina Clásica',
+        hours: 'Lun a Dom · 08:00 al cierre',
+        badge: '🎧 Sede Coffee Rave',
+        accent: true,
+      },
+      {
+        num: '03',
+        name: 'San Martín y O. Andrade',
+        area: 'Zona Sur · Rosario',
+        hours: 'Lun a Dom · 08:00 a 21:00 hs',
+        badge: 'Desayunos & Almuerzos',
+        accent: false,
+      },
+      {
+        num: '04',
+        name: 'Médicos de Funes 1685',
+        area: 'Complejo Barrio Calmo · Funes',
+        hours: 'Lun a Dom · 08:00 al cierre',
+        badge: '🎧 Sunset & Pérgola',
+        accent: true,
+      },
+    ];
+
+    // ========================================================================
+    // SIGNATURE POURING COFFEE PITCHER WAVE SVG
+    // ========================================================================
+    function CamiloPitcherWave() {
+      return (
+        <svg viewBox="0 0 540 125" fill="none" className="w-[280px] sm:w-[390px] h-auto select-none pointer-events-none">
+          <g transform="translate(46, 4) rotate(28)">
+            <path d="M 18,12 C 4,-2 -10,16 6,32 L 15,38" stroke="#111111" strokeWidth="3.2" strokeLinecap="round" />
+            <path d="M 16,6 L 62,2 L 54,54 C 53,61 46,65 38,65 L 20,63 C 12,62 8,56 9,48 L 16,6 Z" fill="#F3ECE1" stroke="#111111" strokeWidth="3.2" strokeLinejoin="round" />
+            <ellipse cx="39" cy="4" rx="23" ry="5.5" fill="#F3ECE1" stroke="#111111" strokeWidth="3" />
+          </g>
+          <path d="M 105,44 C 116,64 122,84 118,112 C 116,122 129,122 140,113 C 179,80 238,63 298,78 C 358,93 415,120 520,125 L 68,125 C 82,122 102,118 106,100 C 109,83 103,64 95,47 Z" fill="#111111" />
+          <path d="M 180,106 C 214,87 262,85 310,101" stroke="#F3ECE1" strokeWidth="2.6" strokeLinecap="round" />
+        </svg>
+      );
+    }
+
+    // ========================================================================
+    // MAIN EDITORIAL SHOWCASE PAGE
+    // ========================================================================
+    function App() {
+      const [activeTab, setActiveTab] = useState('icono-xxl');
+      const [selectedGoal, setSelectedGoal] = useState('rave');
+      const [selectedBranch, setSelectedBranch] = useState('Médicos de Funes 1685 (Funes)');
+      const [people, setPeople] = useState('6 personas');
+      const [hour, setHour] = useState('Viernes 18:30 hs');
+
+      const items = MENU_SHOWCASE[activeTab] || MENU_SHOWCASE['icono-xxl'];
+      const currentCategory = CATEGORIES.find((c) => c.id === activeTab) || CATEGORIES[0];
+      const activeGoalObj = BOOKING_CARDS.find((b) => b.id === selectedGoal) || BOOKING_CARDS[0];
+
+      return (
+        <div className="min-h-screen flex flex-col">
+
+          {/* ==================================================================
+              1. STICKY EDITORIAL NAVBAR (Logo oficial colgante + limpio)
+          ================================================================== */}
+          <header className="sticky top-0 z-50 bg-[#F3ECE1]/95 backdrop-blur-md border-b-[2px] border-[#111111]">
+            <div className="max-w-[1360px] mx-auto px-5 sm:px-10 h-[78px] sm:h-[86px] flex items-center justify-between gap-4">
+              
+              {/* Official Camilo Black Circle Emblem */}
+              <a href="#inicio" className="relative z-50 flex items-center gap-3.5 group">
+                <div className="w-[86px] h-[86px] sm:w-[108px] sm:h-[108px] rounded-full bg-[#050505] border-[2.5px] border-[#111111] shadow-[0_10px_24px_rgba(0,0,0,0.22)] overflow-hidden translate-y-3 sm:translate-y-4 transition-transform duration-300 group-hover:scale-105">
+                  <img
+                    src="assets/logo_oficial.jpg"
+                    alt="Camilo Café Artesanal"
+                    className="w-full h-full object-cover scale-[1.04]"
+                  />
+                </div>
+                <div className="hidden xl:block pl-1">
+                  <span className="block text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#5A5248]">
+                    ROSARIO & FUNES
+                  </span>
+                  <span className="block text-[13.5px] font-extrabold text-[#111111]">
+                    Abierto todos los días · 08 hs
+                  </span>
+                </div>
+              </a>
+
+              {/* Signature Dot-Framed Navigation */}
+              <nav className="hidden lg:flex items-center gap-7 text-[13.5px] font-extrabold tracking-[-0.01em] text-[#111111]">
+                <a href="#carta" onClick={() => setActiveTab('icono-xxl')} className="hover:text-[#E86A1C] transition-colors">
+                  .BOLLERÍA XXL.
+                </a>
+                <a href="#carta" onClick={() => setActiveTab('almuerzos')} className="hover:text-[#E86A1C] transition-colors">
+                  .GOURMET XL.
+                </a>
+                <a href="#carta" onClick={() => setActiveTab('tardecita')} className="hover:text-[#E86A1C] transition-colors">
+                  .LICUADOS Y TRAGOS.
+                </a>
+                <a href="#sunset" className="hover:text-[#E86A1C] transition-colors">
+                  .COFFEE RAVE.
+                </a>
+                <a href="#casas" className="hover:text-[#E86A1C] transition-colors">
+                  .4 SUCURSALES.
+                </a>
+              </nav>
+
+              {/* High-Contrast Tactile CTA */}
+              <a
+                href="#reservas"
+                className="bg-[#E86A1C] hover:bg-[#CC560E] active:translate-y-0.5 text-white font-extrabold text-[13px] sm:text-[14px] px-5 sm:px-6 py-2.5 sm:py-3 rounded-full border-[2px] border-[#111111] shadow-[0_3px_0_#111111] transition-all"
+              >
+                Reservar / Pedir por WhatsApp →
+              </a>
+            </div>
+          </header>
+
+          {/* ==================================================================
+              2. HERO MONUMENTAL: EDITORIAL SPLIT CON FOTO ESTRELLA XXL
+          ================================================================== */}
+          <section id="inicio" className="relative pt-10 sm:pt-14 pb-12 sm:pb-16 border-b-[2px] border-[#111111]">
+            <div className="max-w-[1360px] mx-auto px-5 sm:px-10">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                
+                {/* Left Copy Block (6 Cols) */}
+                <div className="lg:col-span-6">
+                  <div className="inline-flex items-center gap-2 bg-[#FAF6F0] border-[1.75px] border-[#111111] rounded-full px-4 py-1.5 text-[11.5px] font-extrabold uppercase tracking-wider shadow-[0_2px_0_#111111] mb-5">
+                    <span className="w-2 h-2 rounded-full bg-[#E86A1C]" />
+                    <span>CAFETERÍA DE ESPECIALIDAD & PANADERÍA ARTESANAL XXL</span>
+                  </div>
+
+                  <h1 className="font-display text-[42px] sm:text-[58px] xl:text-[66px] leading-[0.98] text-[#111111] uppercase">
+                    DEJÁ DE
+                    <br />
+                    IMAGINARLO:
+                    <br />
+                    <span className="text-[#E86A1C]">MIRÁ LA CARTA</span>
+                    <br />
+                    EN TAMAÑO REAL.
+                  </h1>
+
+                  <p className="mt-5 text-[17px] sm:text-[19px] leading-[1.48] text-[#35302B] font-medium max-w-[540px]">
+                    Croissants del tamaño de tus dos manos, tazones de cerámica artesanal de{' '}
+                    <strong className="text-[#111111] font-extrabold">500cc</strong>, bidones de 5 litros recién exprimidos y promos pensadas para compartir en nuestras 4 esquinas de Rosario y Funes.
+                  </p>
+
+                  <div className="mt-8 flex flex-wrap items-center gap-3.5">
+                    <a
+                      href="#carta"
+                      className="bg-[#111111] hover:bg-[#E86A1C] text-white font-extrabold text-[15px] px-7 py-4 rounded-full border-[2px] border-[#111111] shadow-[0_4px_0_#E86A1C] hover:shadow-[0_4px_0_#111111] transition-all"
+                    >
+                      Explorar la Carta XXL ↓
+                    </a>
+                    <a
+                      href="#reservas"
+                      className="bg-[#FAF6F0] hover:bg-[#E8DFD1] text-[#111111] font-extrabold text-[15px] px-6 py-4 rounded-full border-[2px] border-[#111111] shadow-[0_4px_0_#111111] transition-all"
+                    >
+                      Armar Reserva en 3 Toques
+                    </a>
+                  </div>
+
+                  {/* Quick Proof Metrics */}
+                  <div className="mt-10 pt-6 border-t border-[#111111]/15 grid grid-cols-3 gap-4 max-w-[500px]">
+                    <div>
+                      <div className="font-display text-[24px] sm:text-[28px] text-[#111111]">500cc</div>
+                      <div className="text-[12px] font-bold text-[#5A5248]">Tazón insignia bicolor</div>
+                    </div>
+                    <div>
+                      <div className="font-display text-[24px] sm:text-[28px] text-[#E86A1C]">4 Casas</div>
+                      <div className="text-[12px] font-bold text-[#5A5248]">Rosario & Funes (Pet Friendly)</div>
+                    </div>
+                    <div>
+                      <div className="font-display text-[24px] sm:text-[28px] text-[#111111]">+107K</div>
+                      <div className="text-[12px] font-bold text-[#5A5248]">Comunidad en @cafe.camilo</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Hero Visual Showcase (6 Cols) */}
+                <div className="lg:col-span-6 relative">
+                  <div className="relative rounded-[28px] overflow-hidden border-[2.5px] border-[#111111] shadow-[0_12px_0_#111111] bg-[#223A36] aspect-[4/3]">
+                    <img
+                      src="assets/menu/01_croissant_pistacho_xxl.jpg"
+                      alt="Croissant XXL Pistacho y Pastelera sobre Tazón 500cc Camilo"
+                      className="w-full h-full object-cover object-center hover:scale-[1.03] transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent pointer-events-none" />
+
+                    {/* Floating Authentic Dish Tag */}
+                    <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 flex flex-wrap items-end justify-between gap-3">
+                      <div className="bg-[#FAF6F0]/95 backdrop-blur-md border-[2px] border-[#111111] rounded-2xl px-4 py-3 shadow-lg max-w-[340px]">
+                        <span className="text-[10.5px] font-extrabold uppercase tracking-widest text-[#E86A1C] block">
+                          .EL MÁS VIRAL DE ROSARIO.
+                        </span>
+                        <span className="text-[17px] sm:text-[19px] font-extrabold text-[#111111] leading-tight block mt-0.5">
+                          Croissant XXL Pistacho & Pastelera
+                        </span>
+                      </div>
+                      <div className="font-price bg-[#111111] text-white text-[22px] sm:text-[24px] font-bold px-5 py-2 rounded-full border-2 border-white/20 shadow-xl">
+                        $15.000
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* ==================================================================
+              3. CINTA EDITORIAL EN MOVIMIENTO (Brand Marquee)
+          ================================================================== */}
+          <div className="bg-[#111111] text-[#F3ECE1] py-3.5 border-b-[2px] border-[#111111] overflow-hidden select-none">
+            <div className="marquee-track flex items-center gap-8 text-[13px] sm:text-[14px] font-extrabold tracking-[0.06em] uppercase">
+              <span>🥐 .BOLLERÍA RECIÉN HORNEADA EN TAMAÑO XXL.</span>
+              <span className="text-[#E86A1C]">✦</span>
+              <span>☕ .TAZONES DE CERÁMICA DE 500CC.</span>
+              <span className="text-[#E86A1C]">✦</span>
+              <span>🍊 .BIDONES DE 5 LITROS DE NARANJA EXPRIMIDA.</span>
+              <span className="text-[#E86A1C]">✦</span>
+              <span>🎧 .SUNSET COFFEE RAVE TODOS LOS VIERNES 18 HS.</span>
+              <span className="text-[#E86A1C]">✦</span>
+              <span>🐾 .100% PET FRIENDLY EN LAS 4 SUCURSALES.</span>
+              <span className="text-[#E86A1C]">✦</span>
+              <span>🥐 .BOLLERÍA RECIÉN HORNEADA EN TAMAÑO XXL.</span>
+              <span className="text-[#E86A1C]">✦</span>
+              <span>☕ .TAZONES DE CERÁMICA DE 500CC.</span>
+              <span className="text-[#E86A1C]">✦</span>
+              <span>🍊 .BIDONES DE 5 LITROS DE NARANJA EXPRIMIDA.</span>
+              <span className="text-[#E86A1C]">✦</span>
+              <span>🎧 .SUNSET COFFEE RAVE TODOS LOS VIERNES 18 HS.</span>
+              <span className="text-[#E86A1C]">✦</span>
+              <span>🐾 .100% PET FRIENDLY EN LAS 4 SUCURSALES.</span>
+              <span className="text-[#E86A1C]">✦</span>
+            </div>
+          </div>
+
+          {/* ==================================================================
+              4. LA CARTA INTERACTIVA XXL (Fotografía de Estudio & Precios Claros)
+          ================================================================== */}
+          <section id="carta" className="py-16 sm:py-22 border-b-[2px] border-[#111111]">
+            <div className="max-w-[1360px] mx-auto px-5 sm:px-10">
+              
+              {/* Header + Filter Pills */}
+              <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+                <div>
+                  <span className="text-[12px] font-extrabold uppercase tracking-[0.15em] text-[#E86A1C]">
+                    .CARTA VISUAL INTERACTIVA.
+                  </span>
+                  <h2 className="font-display text-[34px] sm:text-[46px] text-[#111111] uppercase leading-[1.02] mt-1">
+                    ELEGÍ QUÉ TE TIENTA HOY
+                  </h2>
+                </div>
+
+                {/* Horario de la pestaña seleccionada */}
+                <div className="inline-flex items-center gap-2.5 bg-[#FAF6F0] border-[1.75px] border-[#111111] rounded-full px-4 py-2 text-[13px] font-extrabold shadow-[0_2px_0_#111111] self-start lg:self-auto">
+                  <span className="text-[#E86A1C]">🕒 Horario de esta sección:</span>
+                  <span>{currentCategory.hours}</span>
+                </div>
+              </div>
+
+              {/* Category Tabs */}
+              <div className="flex flex-wrap gap-2.5 sm:gap-3 mb-10">
+                {CATEGORIES.map((cat) => {
+                  const isActive = activeTab === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveTab(cat.id)}
+                      className={`px-5 py-3 rounded-full text-[12.5px] sm:text-[13.5px] font-extrabold tracking-[-0.01em] transition-all cursor-pointer border-[2px] border-[#111111] ${
+                        isActive
+                          ? 'bg-[#E86A1C] text-white shadow-[0_4px_0_#111111] -translate-y-0.5'
+                          : 'bg-[#FAF6F0] text-[#111111] hover:bg-[#E8DFD1]'
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* 2x2 High-Impact Editorial Food Grid */}
+              <div key={activeTab} className="animate-fade-up grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7">
+                {items.map((dish) => (
+                  <article
+                    key={dish.id}
+                    className="editorial-card group bg-[#FAF6F0] border-[2px] border-[#111111] rounded-[24px] overflow-hidden shadow-[0_5px_0_#111111] flex flex-col"
+                  >
+                    {/* Large 16:10 Studio Photograph */}
+                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#223A36] border-b-[2px] border-[#111111]">
+                      <img
+                        src={dish.image}
+                        alt={dish.title}
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                      <div className="absolute inset-x-0 top-0 p-4 flex items-center justify-between gap-2">
+                        <span className="bg-[#FAF6F0]/95 backdrop-blur-xs text-[#111111] border-[1.5px] border-[#111111] text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
+                          {dish.badge}
+                        </span>
+                        <span className="bg-[#111111]/85 backdrop-blur-xs text-white text-[11.5px] font-bold px-3 py-1 rounded-full">
+                          {dish.time}
+                        </span>
+                      </div>
+
+                      {/* Signature Price Pill */}
+                      <div className="font-price absolute bottom-3.5 right-3.5 bg-[#111111] text-white text-[20px] sm:text-[22px] font-bold px-5 py-1.5 rounded-full border border-white/20 shadow-lg">
+                        {dish.price}
+                      </div>
+                    </div>
+
+                    {/* Clean Editorial Description */}
+                    <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-[22px] sm:text-[24px] font-extrabold text-[#111111] leading-[1.15] tracking-[-0.02em]">
+                          {dish.title}
+                        </h3>
+                        <p className="mt-2 text-[14.5px] sm:text-[15.5px] leading-[1.48] text-[#4A443D] font-medium">
+                          {dish.desc}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              {/* Bottom Signature Pitcher Wave Accent */}
+              <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-6 pt-4">
+                <CamiloPitcherWave />
+                <div className="bg-[#E8DFD1] border-[2px] border-[#111111] rounded-2xl px-6 py-4 max-w-[460px]">
+                  <p className="text-[14px] font-extrabold text-[#111111]">
+                    🍊 ¿Buscás botellas de 1L, bidones de 5L o bolsas de panificados congelados para hornear en casa?
+                  </p>
+                  <a href="#reservas" onClick={() => setSelectedGoal('bidon')} className="inline-block mt-1.5 text-[13.5px] font-extrabold text-[#E86A1C] underline">
+                    Dejalo encargado por WhatsApp en 3 toques →
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          {/* ==================================================================
+              5. EXPERIENCIA SUNSET COFFEE RAVE (Sección Nocturna de Alto Impacto)
+          ================================================================== */}
+          <section id="sunset" className="bg-[#111111] text-[#F3ECE1] py-16 sm:py-24 border-b-[2px] border-[#111111] relative overflow-hidden">
+            {/* Subtle Sunset Glow */}
+            <div className="absolute -top-32 right-0 w-[520px] h-[520px] rounded-full bg-[#E86A1C]/20 blur-[120px] pointer-events-none" />
+
+            <div className="max-w-[1360px] mx-auto px-5 sm:px-10 relative z-10">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                
+                {/* Left Copy */}
+                <div className="lg:col-span-6">
+                  <div className="inline-flex items-center gap-2 bg-[#E86A1C] text-white text-[11.5px] font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full mb-5">
+                    <span>🎧 TODOS LOS VIERNES · DESDE LAS 18:00 HS</span>
+                  </div>
+
+                  <h2 className="font-display text-[38px] sm:text-[54px] leading-[0.98] uppercase text-white">
+                    SUNSET CAMILO.
+                    <br />
+                    <span className="text-[#E86A1C]">COFFEE RAVE</span>
+                    <br />
+                    & AFTER OFFICE.
+                  </h2>
+
+                  <p className="mt-5 text-[16.5px] sm:text-[18px] leading-[1.5] text-[#D2C9BA] max-w-[520px]">
+                    Cuando baja el sol, encendemos la cabina: <strong>DJ en vivo</strong>, copones de Aperol Spritz con Salentein Extra Brut, Gin Tonic Beefeater, tapeo crocante y todo nuestro café de especialidad al aire libre.
+                  </p>
+
+                  <div className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-[520px]">
+                    <div className="bg-white/5 border border-white/15 rounded-2xl p-4">
+                      <span className="text-xs font-extrabold uppercase text-[#E86A1C]">📍 ROSARIO (ECHESORTU)</span>
+                      <div className="text-[16px] font-extrabold text-white mt-0.5">Mendoza y Lavalle</div>
+                      <div className="text-xs text-[#B8AFA0] mt-0.5">En simultáneo desde las 18:00 hs</div>
+                    </div>
+                    <div className="bg-white/5 border border-white/15 rounded-2xl p-4">
+                      <span className="text-xs font-extrabold uppercase text-[#E86A1C]">📍 FUNES (BARRIO CALMO)</span>
+                      <div className="text-[16px] font-extrabold text-white mt-0.5">Médicos de Funes 1685</div>
+                      <div className="text-xs text-[#B8AFA0] mt-0.5">Pérgola & terraza al atardecer</div>
+                    </div>
+                  </div>
+
+                  <div className="mt-8">
+                    <a
+                      href="#reservas"
+                      onClick={() => setSelectedGoal('rave')}
+                      className="inline-flex items-center gap-2.5 bg-[#E86A1C] hover:bg-[#CC560E] text-white font-extrabold text-[15px] px-7 py-4 rounded-full shadow-[0_8px_28px_rgba(232,106,28,0.35)] transition-all"
+                    >
+                      <span>Reservar mesa para este Viernes</span>
+                      <span>→</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Right Editorial Cocktail Photo + Original Flyer */}
+                <div className="lg:col-span-6">
+                  <div className="relative rounded-[26px] overflow-hidden border-2 border-white/20 shadow-2xl aspect-[4/3]">
+                    <img
+                      src="assets/menu/06_tragos_sunset_rave.jpg"
+                      alt="Tragos Sunset Coffee Rave Camilo"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-4">
+                      <div>
+                        <div className="text-xs font-extrabold uppercase tracking-widest text-[#E86A1C]">
+                          BARRA CAMILO · COPONES 500ML
+                        </div>
+                        <div className="text-lg sm:text-xl font-extrabold text-white">
+                          Aperol Spritz · Gin Tonic · Cynar · Fernet
+                        </div>
+                      </div>
+                      <span className="bg-white/15 backdrop-blur-md text-white text-xs font-extrabold px-3.5 py-1.5 rounded-full border border-white/20">
+                        DJ Set Live
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* ==================================================================
+              6. RESERVAS Y ENCARGOS EN 3 TOQUES (Visual, Limpio e Intuitivo)
+          ================================================================== */}
+          <section id="reservas" className="border-b-[2px] border-[#111111]">
+            <div className="grid grid-cols-1 lg:grid-cols-12">
+              
+              {/* Left 7 Cols: 3-Touch Selector */}
+              <div className="lg:col-span-7 bg-[#F3ECE1] px-5 sm:px-10 lg:px-14 py-14 sm:py-20 lg:border-r-[2px] border-[#111111]">
+                <div className="max-w-[680px] ml-auto">
+                  <span className="text-[12px] font-extrabold uppercase tracking-[0.14em] text-[#E86A1C]">
+                    .CENTRAL RÁPIDA DE WHATSAPP.
+                  </span>
+                  <h2 className="font-display text-[32px] sm:text-[42px] text-[#111111] uppercase leading-[1.04] mt-1">
+                    ARMÁ TU RESERVA O ENCARGO EN 3 TOQUES
+                  </h2>
+                  <p className="mt-2 text-[16.5px] text-[#4A443D] font-medium">
+                    Sin demoras en mensajes directos de Instagram. Elegís tu opción y se genera el WhatsApp listo.
+                  </p>
+
+                  {/* 1. Qué buscás */}
+                  <div className="mt-8">
+                    <h3 className="text-[15.5px] font-extrabold text-[#111111] mb-3">
+                      1. Elegí qué buscás
+                    </h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {BOOKING_CARDS.map((card) => {
+                        const active = selectedGoal === card.id;
+                        return (
+                          <button
+                            key={card.id}
+                            type="button"
+                            onClick={() => setSelectedGoal(card.id)}
+                            className={`rounded-[18px] overflow-hidden text-left transition-all cursor-pointer flex flex-col justify-between border-[2px] ${
+                              active
+                                ? 'bg-[#FAF6F0] border-[#E86A1C] shadow-[0_4px_0_#E86A1C] -translate-y-0.5'
+                                : 'bg-[#FAF6F0] border-[#111111]/30 hover:border-[#111111]'
+                            }`}
+                          >
+                            <div className="relative h-24 w-full overflow-hidden">
+                              <img src={card.img} alt={card.title} className="w-full h-full object-cover" />
+                              {active && (
+                                <span className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#E86A1C] text-white text-xs font-black flex items-center justify-center shadow">
+                                  ✓
+                                </span>
+                              )}
+                            </div>
+                            <div className="p-3">
+                              <div className="text-[13px] font-extrabold text-[#111111] leading-tight">
+                                {card.title}
+                              </div>
+                              <div className="text-[11px] font-semibold text-[#5A5248] mt-0.5">
+                                {card.sub}
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* 2. Sucursal */}
+                  <div className="mt-7">
+                    <h3 className="text-[15.5px] font-extrabold text-[#111111] mb-3">
+                      2. Elegí la Sucursal
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {[
+                        'Pte. Roca 1259 (Centro)',
+                        'Mendoza y Lavalle (Echesortu)',
+                        'San Martín y O. Andrade',
+                        'Médicos de Funes 1685 (Funes)',
+                      ].map((b) => {
+                        const active = selectedBranch === b;
+                        return (
+                          <button
+                            key={b}
+                            type="button"
+                            onClick={() => setSelectedBranch(b)}
+                            className={`px-4 py-3 rounded-full text-[13.5px] font-extrabold flex items-center justify-center gap-2 border-[2px] border-[#111111] transition-all cursor-pointer ${
+                              active
+                                ? 'bg-[#111111] text-white shadow-[0_3px_0_#E86A1C]'
+                                : 'bg-[#FAF6F0] text-[#111111] hover:bg-[#E8DFD1]'
+                            }`}
+                          >
+                            {active && <span className="w-2.5 h-2.5 rounded-full bg-[#E86A1C]" />}
+                            <span className="truncate">{b}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* 3. Personas y horario */}
+                  <div className="mt-7">
+                    <h3 className="text-[15.5px] font-extrabold text-[#111111] mb-3">
+                      3. Cantidad de personas y horario
+                    </h3>
+                    <div className="flex flex-wrap gap-3">
+                      <select
+                        value={people}
+                        onChange={(e) => setPeople(e.target.value)}
+                        className="bg-[#FAF6F0] border-[2px] border-[#111111] rounded-full px-5 py-2.5 text-[14px] font-extrabold text-[#111111] cursor-pointer focus:outline-none"
+                      >
+                        <option>2 personas</option>
+                        <option>4 personas</option>
+                        <option>6 personas</option>
+                        <option>8 personas</option>
+                        <option>12+ personas (Grupo)</option>
+                      </select>
+
+                      <select
+                        value={hour}
+                        onChange={(e) => setHour(e.target.value)}
+                        className="bg-[#FAF6F0] border-[2px] border-[#111111] rounded-full px-5 py-2.5 text-[14px] font-extrabold text-[#111111] cursor-pointer focus:outline-none"
+                      >
+                        <option>Viernes 18:30 hs</option>
+                        <option>Viernes 19:30 hs</option>
+                        <option>Sábado 10:00 hs</option>
+                        <option>Sábado 17:30 hs</option>
+                        <option>Lunes a Viernes 13:00 hs</option>
+                      </select>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              {/* Right 5 Cols: Live WhatsApp Bubble + Alianza SpeedWash */}
+              <div className="lg:col-span-5 bg-[#161514] text-white px-5 sm:px-10 py-14 sm:py-20 flex flex-col justify-center">
+                <div className="max-w-[500px] mr-auto w-full space-y-5">
+                  
+                  {/* Visual Preview Card */}
+                  <div className="relative h-[190px] rounded-[20px] overflow-hidden border border-white/15">
+                    <img src={activeGoalObj.img} alt={activeGoalObj.title} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                    <div className="absolute bottom-3.5 left-4 right-4 text-center">
+                      <span className="text-[14px] sm:text-[15px] font-extrabold tracking-[0.06em] uppercase text-white">
+                        {activeGoalObj.caption}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Green WhatsApp Preview Box */}
+                  <div className="bg-[#193325] border border-[#2D5740] rounded-[22px] p-5 sm:p-6 shadow-2xl">
+                    <p className="text-[14.5px] font-extrabold text-[#EAE6DF] mb-3.5">
+                      Así se abre tu WhatsApp listo para tocar Enviar:
+                    </p>
+
+                    <div className="relative bg-[#F3ECE1] text-[#111111] rounded-[16px] rounded-bl-[4px] p-4 text-[14.5px] leading-[1.48] shadow">
+                      Hola Camilo! Quiero coordinar <strong>{activeGoalObj.msgText}</strong> en{' '}
+                      <strong>{selectedBranch}</strong> ({hour}). Somos <strong>{people}</strong>. ¡Muchas gracias!
+                    </div>
+
+                    <a
+                      href="#reservas"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const text = `Hola Camilo! Quiero coordinar ${activeGoalObj.msgText} en ${selectedBranch} (${hour}). Somos ${people}. Muchas gracias!`;
+                        window.open(`https://wa.me/5493410000000?text=${encodeURIComponent(text)}`, '_blank');
+                      }}
+                      className="mt-4 w-full bg-[#25B456] hover:bg-[#1E9B49] text-white font-extrabold text-[15.5px] py-3.5 px-6 rounded-full flex items-center justify-center gap-2 shadow-[0_6px_22px_rgba(37,180,86,0.35)] transition-all cursor-pointer"
+                    >
+                      <span>Abrir WhatsApp con este mensaje listo →</span>
+                    </a>
+                  </div>
+
+                  {/* Alianza SpeedWash x Camilo Card */}
+                  <div className="bg-[#FAF6F0] text-[#111111] rounded-[20px] p-4 flex items-center justify-between gap-3 shadow-md">
+                    <div className="flex items-center gap-3.5">
+                      <img
+                        src="assets/posts/camilo_post_2.jpg"
+                        alt="SpeedWash x Camilo"
+                        className="w-13 h-13 w-[54px] h-[54px] rounded-xl object-cover border border-[#111111]/20 flex-shrink-0"
+                      />
+                      <div>
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#0099EE]/15 text-[#0077BB]">
+                          PROMO MAÑANAS
+                        </span>
+                        <h4 className="text-[16px] font-extrabold text-[#111111] leading-tight mt-0.5">
+                          Alianza SpeedWash × Camilo
+                        </h4>
+                        <p className="text-[12px] text-[#4A443D] font-medium">
+                          Lun a Vie 8 a 11 hs — Lavá tu auto y desayuná gratis
+                        </p>
+                      </div>
+                    </div>
+                    <div className="font-price text-[20px] font-bold text-[#111111] flex-shrink-0">
+                      $25.000
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          {/* ==================================================================
+              7. NUESTRAS 4 CASAS (Rosario & Funes · Pet Friendly)
+          ================================================================== */}
+          <section id="casas" className="py-16 sm:py-22 bg-[#F3ECE1]">
+            <div className="max-w-[1360px] mx-auto px-5 sm:px-10">
+              
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                <div>
+                  <span className="text-[12px] font-extrabold uppercase tracking-[0.14em] text-[#E86A1C]">
+                    .ROSARIO Y FUNES.
+                  </span>
+                  <h2 className="font-display text-[34px] sm:text-[46px] text-[#111111] uppercase leading-[1.02] mt-1">
+                    .NUESTRAS 4 CASAS.
+                  </h2>
+                </div>
+
+                {/* Official Pet Friendly Highlight */}
+                <div className="inline-flex items-center gap-3 bg-[#FAF6F0] border-[2px] border-[#111111] rounded-2xl px-4 py-2.5 shadow-[0_3px_0_#111111] self-start">
+                  <img
+                    src="assets/highlights/highlight_0_Pet friend.jpg"
+                    alt="Pet Friendly"
+                    className="w-11 h-11 rounded-full object-cover border border-[#111111]/25"
+                  />
+                  <div>
+                    <div className="text-[13.5px] font-extrabold text-[#111111]">100% Pet Friendly</div>
+                    <div className="text-[12px] text-[#5A5248] font-medium">Mesas adentro y en vereda</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {SUCURSALES.map((s) => (
+                  <div
+                    key={s.num}
+                    className="editorial-card bg-[#FAF6F0] border-[2px] border-[#111111] rounded-[22px] p-6 flex flex-col justify-between shadow-[0_5px_0_#111111]"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="font-display text-lg text-[#111111]">{s.num}.</span>
+                        <span
+                          className={`text-[11px] font-extrabold uppercase px-3 py-1 rounded-full border border-[#111111] ${
+                            s.accent ? 'bg-[#E86A1C] text-white' : 'bg-[#E8DFD1] text-[#111111]'
+                          }`}
+                        >
+                          {s.badge}
+                        </span>
+                      </div>
+                      <h3 className="text-[22px] font-extrabold text-[#111111] leading-tight">
+                        {s.name}
+                      </h3>
+                      <p className="text-[13.5px] font-bold text-[#E86A1C] mt-1">
+                        {s.area}
+                      </p>
+                      <p className="text-[13px] font-semibold text-[#4A443D] mt-4 pt-3 border-t border-[#111111]/15">
+                        🕒 {s.hours}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </section>
+
+          {/* ==================================================================
+              8. FOOTER DE MARCA
+          ================================================================== */}
+          <footer className="bg-[#111111] text-[#D8CFC2] py-10 px-5 sm:px-10 border-t-[2px] border-[#111111]">
+            <div className="max-w-[1360px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5">
+                <img
+                  src="assets/logo_oficial.jpg"
+                  alt="Camilo Café Artesanal"
+                  className="w-11 h-11 rounded-full object-cover border border-white/20"
+                />
+                <div>
+                  <div className="text-white font-extrabold text-sm">CAMILO · Café Artesanal</div>
+                  <div className="text-xs text-[#9E9589]">Rosario & Funes · @cafe.camilo (+107K seguidores)</div>
+                </div>
+              </div>
+              <div className="text-xs font-semibold text-[#9E9589]">
+                Maqueta Visual Oficial · Identidad & Fotografía XXL
+              </div>
+            </div>
+          </footer>
+
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
