@@ -11,7 +11,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
 
   <!-- React 18 & Babel -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -27,8 +27,6 @@
       --ink-muted: #4A443D;
       --orange: #E86A1C;
       --orange-deep: #CC560E;
-      --sage: #6F8674;
-      --teal-plate: #223A36;
       --whatsapp-green: #25B456;
     }
 
@@ -48,23 +46,30 @@
       letter-spacing: -0.03em;
     }
 
-    .font-editorial {
-      font-family: 'Instrument Serif', Georgia, serif;
-    }
-
     .font-price {
       font-family: 'Space Grotesk', sans-serif;
       letter-spacing: -0.03em;
     }
 
+    /* Clean native select reset so there is NEVER a double arrow */
+    select.camilo-select {
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      background-image: none !important;
+    }
+    select.camilo-select::-ms-expand {
+      display: none !important;
+    }
+
     /* Tactile Neo-Editorial Card Lift */
     .editorial-card {
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                  box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .editorial-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 0 #111111;
+      transform: translateY(-4px);
+      box-shadow: 0 9px 0 #111111;
     }
 
     /* Infinite Marquee Animation */
@@ -75,28 +80,22 @@
     .marquee-track {
       display: flex;
       width: max-content;
-      animation: marqueeScroll 32s linear infinite;
+      animation: marqueeScroll 34s linear infinite;
     }
     .marquee-track:hover {
       animation-play-state: paused;
     }
 
-    /* Subtle warm grain texture */
-    .warm-grain {
-      background-image: radial-gradient(rgba(17, 17, 17, 0.03) 1px, transparent 0);
-      background-size: 22px 22px;
-    }
-
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .animate-fade-up {
-      animation: fadeUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
   </style>
 </head>
-<body class="warm-grain selection:bg-[#E86A1C] selection:text-white">
+<body class="selection:bg-[#E86A1C] selection:text-white">
   <div id="root"></div>
 
   <script type="text/babel">
@@ -138,7 +137,6 @@
           desc: 'Doble tamaño real recién horneado, coronado mitad crema de pistacho artesanal y mitad pastelera tibia sobre tazón de 500cc.',
           price: '$15.000',
           image: 'assets/menu/01_croissant_pistacho_xxl.jpg',
-          featured: true,
         },
         {
           id: 'camilo-power-libre',
@@ -177,7 +175,6 @@
           desc: 'Café cortado o doble en jarrita de vidrio + Medialuna XXL tibia bañada en almíbar suave.',
           price: '$7.500',
           image: 'assets/menu/09_tentacion_jarrita_medialuna.jpg',
-          featured: true,
         },
         {
           id: 'medialuna-jyq',
@@ -216,7 +213,6 @@
           desc: 'Croissant gigante relleno de pollo rebozado en barbacoa, cherrys confitados y cebolla caramelizada. Incluye jugo o bebida + café.',
           price: '$15.000',
           image: 'assets/menu/05_gourmet_xl_almuerzo.jpg',
-          featured: true,
         },
         {
           id: 'toston-almuerzo',
@@ -255,7 +251,6 @@
           desc: 'Frutilla Pistacho, Frutella, Banana Split (500ml), cafés helados marmolados con Nutella y milhojas de frutillas frescas.',
           price: '$8.500',
           image: 'assets/menu/07_licuados_iced_coffee.jpg',
-          featured: true,
         },
         {
           id: 'tragos-sunset',
@@ -290,32 +285,32 @@
     const BOOKING_CARDS = [
       {
         id: 'rave',
-        title: 'Sunset Coffee Rave',
-        sub: 'Viernes 18 hs · DJ en vivo',
+        title: 'Coffee Rave',
+        sub: 'Viernes 18 hs · DJ',
         msgText: 'mesa para el Sunset Coffee Rave de este viernes 18:00 hs',
         img: 'assets/menu/06_tragos_sunset_rave.jpg',
         caption: 'SUNSET COFFEE RAVE · VIERNES 18 HS',
       },
       {
         id: 'grupos',
-        title: 'Despedidas y Grupos',
-        sub: 'Cumpleaños y equipos',
+        title: 'Grupos y Festejos',
+        sub: 'Cumples y equipos',
         msgText: 'mesa grupal para festejo / despedida',
         img: 'assets/menu/04_toston_compartir_xxl.jpg',
         caption: 'MESAS GRUPALES SIN ESPERAR EN DM',
       },
       {
         id: 'bidon',
-        title: 'Bidón 5L y Congelados',
-        sub: 'Retiro o pedido mayorista',
+        title: 'Bidón 5L y Pan',
+        sub: 'Retiro o mayorista',
         msgText: 'encargo de Bidón 5L de Exprimido / Bollería congelada',
         img: 'assets/menu/08_exprimido_bidon_naranja.jpg',
         caption: 'JUGO 5 LITROS & CONGELADOS EN CASA',
       },
       {
         id: 'gift',
-        title: 'Gift Cards & Merch',
-        sub: 'Tarjetas regalo y juegos',
+        title: 'Gift Cards',
+        sub: 'Regalos y Merch',
         msgText: 'una Gift Card de regalo / Merchandising Camilo',
         img: 'assets/menu/01_croissant_pistacho_xxl.jpg',
         caption: 'REGALÁ UN DESAYUNO O MERIENDA XXL',
@@ -327,7 +322,7 @@
         num: '01',
         name: 'Pte. Roca 1259',
         area: 'Rosario Centro · Casa Madre',
-        hours: 'Lun a Dom · 08:00 a 21:00 hs',
+        hours: 'Lun a Dom · 08 a 21 hs',
         badge: 'Casa Matriz',
         accent: false,
       },
@@ -335,15 +330,15 @@
         num: '02',
         name: 'Mendoza y Lavalle',
         area: 'Barrio Echesortu · Esquina Clásica',
-        hours: 'Lun a Dom · 08:00 al cierre',
-        badge: '🎧 Sede Coffee Rave',
+        hours: 'Lun a Dom · 08 hs al cierre',
+        badge: 'Sede Coffee Rave',
         accent: true,
       },
       {
         num: '03',
-        name: 'San Martín y O. Andrade',
+        name: 'San Martín y Andrade',
         area: 'Zona Sur · Rosario',
-        hours: 'Lun a Dom · 08:00 a 21:00 hs',
+        hours: 'Lun a Dom · 08 a 21 hs',
         badge: 'Desayunos & Almuerzos',
         accent: false,
       },
@@ -351,28 +346,11 @@
         num: '04',
         name: 'Médicos de Funes 1685',
         area: 'Complejo Barrio Calmo · Funes',
-        hours: 'Lun a Dom · 08:00 al cierre',
-        badge: '🎧 Sunset & Pérgola',
+        hours: 'Lun a Dom · 08 hs al cierre',
+        badge: 'Sunset & Pérgola',
         accent: true,
       },
     ];
-
-    // ========================================================================
-    // SIGNATURE POURING COFFEE PITCHER WAVE SVG
-    // ========================================================================
-    function CamiloPitcherWave() {
-      return (
-        <svg viewBox="0 0 540 125" fill="none" className="w-[280px] sm:w-[390px] h-auto select-none pointer-events-none">
-          <g transform="translate(46, 4) rotate(28)">
-            <path d="M 18,12 C 4,-2 -10,16 6,32 L 15,38" stroke="#111111" strokeWidth="3.2" strokeLinecap="round" />
-            <path d="M 16,6 L 62,2 L 54,54 C 53,61 46,65 38,65 L 20,63 C 12,62 8,56 9,48 L 16,6 Z" fill="#F3ECE1" stroke="#111111" strokeWidth="3.2" strokeLinejoin="round" />
-            <ellipse cx="39" cy="4" rx="23" ry="5.5" fill="#F3ECE1" stroke="#111111" strokeWidth="3" />
-          </g>
-          <path d="M 105,44 C 116,64 122,84 118,112 C 116,122 129,122 140,113 C 179,80 238,63 298,78 C 358,93 415,120 520,125 L 68,125 C 82,122 102,118 106,100 C 109,83 103,64 95,47 Z" fill="#111111" />
-          <path d="M 180,106 C 214,87 262,85 310,101" stroke="#F3ECE1" strokeWidth="2.6" strokeLinecap="round" />
-        </svg>
-      );
-    }
 
     // ========================================================================
     // MAIN EDITORIAL SHOWCASE PAGE
@@ -392,123 +370,139 @@
         <div className="min-h-screen flex flex-col">
 
           {/* ==================================================================
-              1. STICKY EDITORIAL NAVBAR (Logo oficial colgante + limpio)
+              1. TOP STATUS BAR (Horarios limpios arriba)
+          ================================================================== */}
+          <div className="bg-[#111111] text-[#F3ECE1] text-[12px] py-2 px-5 sm:px-10">
+            <div className="max-w-[1360px] mx-auto flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2 font-semibold whitespace-nowrap">
+                <span className="w-2 h-2 rounded-full bg-[#25B456] inline-block" />
+                <span>ROSARIO & FUNES · Abierto todos los días desde las 08:00 hs</span>
+              </div>
+              <div className="hidden md:flex items-center gap-6 text-[#CFC6B8] font-medium whitespace-nowrap">
+                <span>Promos Tentación: <strong className="text-white">Lun a Vie hasta 16 hs</strong></span>
+                <span>Sunset Coffee Rave: <strong className="text-[#E86A1C]">Viernes 18:00 hs</strong></span>
+              </div>
+            </div>
+          </div>
+
+          {/* ==================================================================
+              2. STICKY NAVBAR (Logo perfectamente contenido, CERO colisión al scrollear)
           ================================================================== */}
           <header className="sticky top-0 z-50 bg-[#F3ECE1]/95 backdrop-blur-md border-b-[2px] border-[#111111]">
-            <div className="max-w-[1360px] mx-auto px-5 sm:px-10 h-[78px] sm:h-[86px] flex items-center justify-between gap-4">
+            <div className="max-w-[1360px] mx-auto px-5 sm:px-10 h-[82px] sm:h-[88px] flex items-center justify-between gap-6">
               
-              {/* Official Camilo Black Circle Emblem */}
-              <a href="#inicio" className="relative z-50 flex items-center gap-3.5 group">
-                <div className="w-[86px] h-[86px] sm:w-[108px] sm:h-[108px] rounded-full bg-[#050505] border-[2.5px] border-[#111111] shadow-[0_10px_24px_rgba(0,0,0,0.22)] overflow-hidden translate-y-3 sm:translate-y-4 transition-transform duration-300 group-hover:scale-105">
+              {/* Left: Official Camilo Black Circle Emblem + Brand Name (Contained inside header height) */}
+              <a href="#inicio" className="flex-shrink-0 flex items-center gap-3 group" aria-label="Camilo Café Artesanal">
+                <div className="w-[62px] h-[62px] sm:w-[68px] sm:h-[68px] rounded-full bg-[#050505] border-[2px] border-[#111111] shadow-md overflow-hidden transition-transform duration-300 group-hover:scale-105">
                   <img
                     src="assets/logo_oficial.jpg"
                     alt="Camilo Café Artesanal"
-                    className="w-full h-full object-cover scale-[1.04]"
+                    className="w-full h-full object-cover scale-[1.05]"
                   />
                 </div>
-                <div className="hidden xl:block pl-1">
-                  <span className="block text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#5A5248]">
-                    ROSARIO & FUNES
+                <div className="hidden xl:flex flex-col">
+                  <span className="font-display text-[17px] leading-none text-[#111111] tracking-tight">
+                    CAMILO
                   </span>
-                  <span className="block text-[13.5px] font-extrabold text-[#111111]">
-                    Abierto todos los días · 08 hs
+                  <span className="text-[11px] font-bold text-[#5A5248] tracking-wide mt-0.5 whitespace-nowrap">
+                    Café artesanal
                   </span>
                 </div>
               </a>
 
-              {/* Signature Dot-Framed Navigation */}
-              <nav className="hidden lg:flex items-center gap-7 text-[13.5px] font-extrabold tracking-[-0.01em] text-[#111111]">
-                <a href="#carta" onClick={() => setActiveTab('icono-xxl')} className="hover:text-[#E86A1C] transition-colors">
+              {/* Center: Single-line Dot-Framed Navigation */}
+              <nav className="hidden lg:flex items-center justify-center gap-5 xl:gap-8 text-[13px] xl:text-[14px] font-extrabold tracking-[-0.01em] text-[#111111]">
+                <a href="#carta" onClick={() => setActiveTab('icono-xxl')} className="whitespace-nowrap hover:text-[#E86A1C] transition-colors">
                   .BOLLERÍA XXL.
                 </a>
-                <a href="#carta" onClick={() => setActiveTab('almuerzos')} className="hover:text-[#E86A1C] transition-colors">
+                <a href="#carta" onClick={() => setActiveTab('almuerzos')} className="whitespace-nowrap hover:text-[#E86A1C] transition-colors">
                   .GOURMET XL.
                 </a>
-                <a href="#carta" onClick={() => setActiveTab('tardecita')} className="hover:text-[#E86A1C] transition-colors">
+                <a href="#carta" onClick={() => setActiveTab('tardecita')} className="whitespace-nowrap hover:text-[#E86A1C] transition-colors">
                   .LICUADOS Y TRAGOS.
                 </a>
-                <a href="#sunset" className="hover:text-[#E86A1C] transition-colors">
+                <a href="#sunset" className="whitespace-nowrap hover:text-[#E86A1C] transition-colors">
                   .COFFEE RAVE.
                 </a>
-                <a href="#casas" className="hover:text-[#E86A1C] transition-colors">
+                <a href="#casas" className="whitespace-nowrap hover:text-[#E86A1C] transition-colors">
                   .4 SUCURSALES.
                 </a>
               </nav>
 
-              {/* High-Contrast Tactile CTA */}
+              {/* Right: Single-line Tactile Pill CTA */}
               <a
                 href="#reservas"
-                className="bg-[#E86A1C] hover:bg-[#CC560E] active:translate-y-0.5 text-white font-extrabold text-[13px] sm:text-[14px] px-5 sm:px-6 py-2.5 sm:py-3 rounded-full border-[2px] border-[#111111] shadow-[0_3px_0_#111111] transition-all"
+                className="flex-shrink-0 whitespace-nowrap inline-flex items-center gap-2 bg-[#E86A1C] hover:bg-[#CC560E] active:translate-y-0.5 text-white font-extrabold text-[13px] sm:text-[14px] px-5 sm:px-6 py-2.5 sm:py-3 rounded-full border-[2px] border-[#111111] shadow-[0_3px_0_#111111] transition-all"
               >
-                Reservar / Pedir por WhatsApp →
+                <span>Reservar por WhatsApp</span>
+                <span aria-hidden="true">→</span>
               </a>
             </div>
           </header>
 
           {/* ==================================================================
-              2. HERO MONUMENTAL: EDITORIAL SPLIT CON FOTO ESTRELLA XXL
+              3. HERO MONUMENTAL: ENTRA 100% EN LA PRIMERA PANTALLA (1280x800 y 1440x900)
           ================================================================== */}
-          <section id="inicio" className="relative pt-10 sm:pt-14 pb-12 sm:pb-16 border-b-[2px] border-[#111111]">
+          <section id="inicio" className="relative py-8 sm:py-11 border-b-[2px] border-[#111111]">
             <div className="max-w-[1360px] mx-auto px-5 sm:px-10">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                 
                 {/* Left Copy Block (6 Cols) */}
                 <div className="lg:col-span-6">
-                  <div className="inline-flex items-center gap-2 bg-[#FAF6F0] border-[1.75px] border-[#111111] rounded-full px-4 py-1.5 text-[11.5px] font-extrabold uppercase tracking-wider shadow-[0_2px_0_#111111] mb-5">
-                    <span className="w-2 h-2 rounded-full bg-[#E86A1C]" />
-                    <span>CAFETERÍA DE ESPECIALIDAD & PANADERÍA ARTESANAL XXL</span>
+                  <div className="inline-flex items-center gap-2 bg-[#FAF6F0] border-[1.75px] border-[#111111] rounded-full px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-wider shadow-[0_2px_0_#111111] mb-4">
+                    <span className="w-2 h-2 rounded-full bg-[#E86A1C] flex-shrink-0" />
+                    <span>CAFETERÍA DE ESPECIALIDAD & PANADERÍA XXL</span>
                   </div>
 
-                  <h1 className="font-display text-[42px] sm:text-[58px] xl:text-[66px] leading-[0.98] text-[#111111] uppercase">
-                    DEJÁ DE
+                  <h1 className="font-display text-[36px] sm:text-[48px] xl:text-[56px] leading-[1.0] text-[#111111] uppercase">
+                    DEJÁ DE IMAGINARLO:
                     <br />
-                    IMAGINARLO:
-                    <br />
-                    <span className="text-[#E86A1C]">MIRÁ LA CARTA</span>
+                    <span className="text-[#E86A1C]">MIRÁ LA CARTA XXL</span>
                     <br />
                     EN TAMAÑO REAL.
                   </h1>
 
-                  <p className="mt-5 text-[17px] sm:text-[19px] leading-[1.48] text-[#35302B] font-medium max-w-[540px]">
+                  <p className="mt-4 text-[16px] sm:text-[17.5px] leading-[1.48] text-[#35302B] font-medium max-w-[530px]">
                     Croissants del tamaño de tus dos manos, tazones de cerámica artesanal de{' '}
                     <strong className="text-[#111111] font-extrabold">500cc</strong>, bidones de 5 litros recién exprimidos y promos pensadas para compartir en nuestras 4 esquinas de Rosario y Funes.
                   </p>
 
-                  <div className="mt-8 flex flex-wrap items-center gap-3.5">
+                  <div className="mt-6 flex flex-wrap items-center gap-3.5">
                     <a
                       href="#carta"
-                      className="bg-[#111111] hover:bg-[#E86A1C] text-white font-extrabold text-[15px] px-7 py-4 rounded-full border-[2px] border-[#111111] shadow-[0_4px_0_#E86A1C] hover:shadow-[0_4px_0_#111111] transition-all"
+                      className="whitespace-nowrap inline-flex items-center gap-2 bg-[#111111] hover:bg-[#E86A1C] text-white font-extrabold text-[14.5px] px-6 py-3.5 rounded-full border-[2px] border-[#111111] shadow-[0_4px_0_#E86A1C] hover:shadow-[0_4px_0_#111111] transition-all"
                     >
-                      Explorar la Carta XXL ↓
+                      <span>Explorar la Carta XXL</span>
+                      <span aria-hidden="true">↓</span>
                     </a>
                     <a
                       href="#reservas"
-                      className="bg-[#FAF6F0] hover:bg-[#E8DFD1] text-[#111111] font-extrabold text-[15px] px-6 py-4 rounded-full border-[2px] border-[#111111] shadow-[0_4px_0_#111111] transition-all"
+                      className="whitespace-nowrap inline-flex items-center bg-[#FAF6F0] hover:bg-[#E8DFD1] text-[#111111] font-extrabold text-[14.5px] px-6 py-3.5 rounded-full border-[2px] border-[#111111] shadow-[0_4px_0_#111111] transition-all"
                     >
                       Armar Reserva en 3 Toques
                     </a>
                   </div>
 
                   {/* Quick Proof Metrics */}
-                  <div className="mt-10 pt-6 border-t border-[#111111]/15 grid grid-cols-3 gap-4 max-w-[500px]">
+                  <div className="mt-6 pt-4 border-t border-[#111111]/15 grid grid-cols-3 gap-4 max-w-[490px]">
                     <div>
-                      <div className="font-display text-[24px] sm:text-[28px] text-[#111111]">500cc</div>
+                      <div className="font-display text-[22px] sm:text-[25px] text-[#111111]">500cc</div>
                       <div className="text-[12px] font-bold text-[#5A5248]">Tazón insignia bicolor</div>
                     </div>
                     <div>
-                      <div className="font-display text-[24px] sm:text-[28px] text-[#E86A1C]">4 Casas</div>
-                      <div className="text-[12px] font-bold text-[#5A5248]">Rosario & Funes (Pet Friendly)</div>
+                      <div className="font-display text-[22px] sm:text-[25px] text-[#E86A1C]">4 Casas</div>
+                      <div className="text-[12px] font-bold text-[#5A5248]">Rosario & Funes</div>
                     </div>
                     <div>
-                      <div className="font-display text-[24px] sm:text-[28px] text-[#111111]">+107K</div>
-                      <div className="text-[12px] font-bold text-[#5A5248]">Comunidad en @cafe.camilo</div>
+                      <div className="font-display text-[22px] sm:text-[25px] text-[#111111]">+107K</div>
+                      <div className="text-[12px] font-bold text-[#5A5248]">Seguidores reales</div>
                     </div>
                   </div>
                 </div>
 
                 {/* Right Hero Visual Showcase (6 Cols) */}
                 <div className="lg:col-span-6 relative">
-                  <div className="relative rounded-[28px] overflow-hidden border-[2.5px] border-[#111111] shadow-[0_12px_0_#111111] bg-[#223A36] aspect-[4/3]">
+                  <div className="relative rounded-[26px] overflow-hidden border-[2.5px] border-[#111111] shadow-[0_10px_0_#111111] bg-[#223A36] aspect-[4/3]">
                     <img
                       src="assets/menu/01_croissant_pistacho_xxl.jpg"
                       alt="Croissant XXL Pistacho y Pastelera sobre Tazón 500cc Camilo"
@@ -517,16 +511,16 @@
                     <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent pointer-events-none" />
 
                     {/* Floating Authentic Dish Tag */}
-                    <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 flex flex-wrap items-end justify-between gap-3">
-                      <div className="bg-[#FAF6F0]/95 backdrop-blur-md border-[2px] border-[#111111] rounded-2xl px-4 py-3 shadow-lg max-w-[340px]">
-                        <span className="text-[10.5px] font-extrabold uppercase tracking-widest text-[#E86A1C] block">
+                    <div className="absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-5 sm:right-5 flex items-end justify-between gap-3">
+                      <div className="bg-[#FAF6F0]/95 backdrop-blur-md border-[2px] border-[#111111] rounded-2xl px-4 py-2.5 shadow-lg">
+                        <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#E86A1C] block">
                           .EL MÁS VIRAL DE ROSARIO.
                         </span>
-                        <span className="text-[17px] sm:text-[19px] font-extrabold text-[#111111] leading-tight block mt-0.5">
+                        <span className="text-[15.5px] sm:text-[17.5px] font-extrabold text-[#111111] leading-tight block mt-0.5">
                           Croissant XXL Pistacho & Pastelera
                         </span>
                       </div>
-                      <div className="font-price bg-[#111111] text-white text-[22px] sm:text-[24px] font-bold px-5 py-2 rounded-full border-2 border-white/20 shadow-xl">
+                      <div className="font-price flex-shrink-0 bg-[#111111] text-white text-[20px] sm:text-[22px] font-bold px-5 py-2 rounded-full border-2 border-white/20 shadow-xl">
                         $15.000
                       </div>
                     </div>
@@ -538,54 +532,54 @@
           </section>
 
           {/* ==================================================================
-              3. CINTA EDITORIAL EN MOVIMIENTO (Brand Marquee)
+              4. CINTA EDITORIAL EN MOVIMIENTO (Brand Marquee)
           ================================================================== */}
           <div className="bg-[#111111] text-[#F3ECE1] py-3.5 border-b-[2px] border-[#111111] overflow-hidden select-none">
-            <div className="marquee-track flex items-center gap-8 text-[13px] sm:text-[14px] font-extrabold tracking-[0.06em] uppercase">
-              <span>🥐 .BOLLERÍA RECIÉN HORNEADA EN TAMAÑO XXL.</span>
+            <div className="marquee-track flex items-center gap-8 text-[13px] font-extrabold tracking-[0.06em] uppercase">
+              <span>.BOLLERÍA RECIÉN HORNEADA EN TAMAÑO XXL.</span>
               <span className="text-[#E86A1C]">✦</span>
-              <span>☕ .TAZONES DE CERÁMICA DE 500CC.</span>
+              <span>.TAZONES DE CERÁMICA DE 500CC.</span>
               <span className="text-[#E86A1C]">✦</span>
-              <span>🍊 .BIDONES DE 5 LITROS DE NARANJA EXPRIMIDA.</span>
+              <span>.BIDONES DE 5 LITROS DE NARANJA EXPRIMIDA.</span>
               <span className="text-[#E86A1C]">✦</span>
-              <span>🎧 .SUNSET COFFEE RAVE TODOS LOS VIERNES 18 HS.</span>
+              <span>.SUNSET COFFEE RAVE TODOS LOS VIERNES 18 HS.</span>
               <span className="text-[#E86A1C]">✦</span>
-              <span>🐾 .100% PET FRIENDLY EN LAS 4 SUCURSALES.</span>
+              <span>.100% PET FRIENDLY EN LAS 4 SUCURSALES.</span>
               <span className="text-[#E86A1C]">✦</span>
-              <span>🥐 .BOLLERÍA RECIÉN HORNEADA EN TAMAÑO XXL.</span>
+              <span>.BOLLERÍA RECIÉN HORNEADA EN TAMAÑO XXL.</span>
               <span className="text-[#E86A1C]">✦</span>
-              <span>☕ .TAZONES DE CERÁMICA DE 500CC.</span>
+              <span>.TAZONES DE CERÁMICA DE 500CC.</span>
               <span className="text-[#E86A1C]">✦</span>
-              <span>🍊 .BIDONES DE 5 LITROS DE NARANJA EXPRIMIDA.</span>
+              <span>.BIDONES DE 5 LITROS DE NARANJA EXPRIMIDA.</span>
               <span className="text-[#E86A1C]">✦</span>
-              <span>🎧 .SUNSET COFFEE RAVE TODOS LOS VIERNES 18 HS.</span>
+              <span>.SUNSET COFFEE RAVE TODOS LOS VIERNES 18 HS.</span>
               <span className="text-[#E86A1C]">✦</span>
-              <span>🐾 .100% PET FRIENDLY EN LAS 4 SUCURSALES.</span>
+              <span>.100% PET FRIENDLY EN LAS 4 SUCURSALES.</span>
               <span className="text-[#E86A1C]">✦</span>
             </div>
           </div>
 
           {/* ==================================================================
-              4. LA CARTA INTERACTIVA XXL (Fotografía de Estudio & Precios Claros)
+              5. LA CARTA INTERACTIVA XXL (Fotografía de Estudio & Precios Claros)
           ================================================================== */}
-          <section id="carta" className="py-16 sm:py-22 border-b-[2px] border-[#111111]">
+          <section id="carta" className="py-16 sm:py-20 border-b-[2px] border-[#111111]">
             <div className="max-w-[1360px] mx-auto px-5 sm:px-10">
               
-              {/* Header + Filter Pills */}
-              <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+              {/* Header + Active Schedule Pill */}
+              <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
                 <div>
                   <span className="text-[12px] font-extrabold uppercase tracking-[0.15em] text-[#E86A1C]">
                     .CARTA VISUAL INTERACTIVA.
                   </span>
-                  <h2 className="font-display text-[34px] sm:text-[46px] text-[#111111] uppercase leading-[1.02] mt-1">
+                  <h2 className="font-display text-[32px] sm:text-[44px] text-[#111111] uppercase leading-[1.02] mt-1">
                     ELEGÍ QUÉ TE TIENTA HOY
                   </h2>
                 </div>
 
-                {/* Horario de la pestaña seleccionada */}
-                <div className="inline-flex items-center gap-2.5 bg-[#FAF6F0] border-[1.75px] border-[#111111] rounded-full px-4 py-2 text-[13px] font-extrabold shadow-[0_2px_0_#111111] self-start lg:self-auto">
-                  <span className="text-[#E86A1C]">🕒 Horario de esta sección:</span>
-                  <span>{currentCategory.hours}</span>
+                <div className="inline-flex items-center gap-2 bg-[#FAF6F0] border-[1.75px] border-[#111111] rounded-full px-4 py-2 text-[13px] font-extrabold shadow-[0_2px_0_#111111] self-start lg:self-auto whitespace-nowrap">
+                  <span className="w-2 h-2 rounded-full bg-[#E86A1C]" />
+                  <span className="text-[#5A5248]">Franja activa:</span>
+                  <span className="text-[#111111]">{currentCategory.hours}</span>
                 </div>
               </div>
 
@@ -597,7 +591,7 @@
                     <button
                       key={cat.id}
                       onClick={() => setActiveTab(cat.id)}
-                      className={`px-5 py-3 rounded-full text-[12.5px] sm:text-[13.5px] font-extrabold tracking-[-0.01em] transition-all cursor-pointer border-[2px] border-[#111111] ${
+                      className={`whitespace-nowrap px-5 py-2.5 rounded-full text-[12.5px] sm:text-[13px] font-extrabold tracking-[-0.01em] transition-all cursor-pointer border-[2px] border-[#111111] ${
                         isActive
                           ? 'bg-[#E86A1C] text-white shadow-[0_4px_0_#111111] -translate-y-0.5'
                           : 'bg-[#FAF6F0] text-[#111111] hover:bg-[#E8DFD1]'
@@ -624,16 +618,16 @@
                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                       />
                       <div className="absolute inset-x-0 top-0 p-4 flex items-center justify-between gap-2">
-                        <span className="bg-[#FAF6F0]/95 backdrop-blur-xs text-[#111111] border-[1.5px] border-[#111111] text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
+                        <span className="bg-[#FAF6F0]/95 backdrop-blur-xs text-[#111111] border-[1.5px] border-[#111111] text-[10.5px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm whitespace-nowrap">
                           {dish.badge}
                         </span>
-                        <span className="bg-[#111111]/85 backdrop-blur-xs text-white text-[11.5px] font-bold px-3 py-1 rounded-full">
+                        <span className="bg-[#111111]/85 backdrop-blur-xs text-white text-[11px] font-bold px-3 py-1 rounded-full whitespace-nowrap">
                           {dish.time}
                         </span>
                       </div>
 
                       {/* Signature Price Pill */}
-                      <div className="font-price absolute bottom-3.5 right-3.5 bg-[#111111] text-white text-[20px] sm:text-[22px] font-bold px-5 py-1.5 rounded-full border border-white/20 shadow-lg">
+                      <div className="font-price absolute bottom-3.5 right-3.5 bg-[#111111] text-white text-[19px] sm:text-[21px] font-bold px-5 py-1.5 rounded-full border border-white/20 shadow-lg">
                         {dish.price}
                       </div>
                     </div>
@@ -641,10 +635,10 @@
                     {/* Clean Editorial Description */}
                     <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                       <div>
-                        <h3 className="text-[22px] sm:text-[24px] font-extrabold text-[#111111] leading-[1.15] tracking-[-0.02em]">
+                        <h3 className="text-[21px] sm:text-[23px] font-extrabold text-[#111111] leading-[1.16] tracking-[-0.02em]">
                           {dish.title}
                         </h3>
-                        <p className="mt-2 text-[14.5px] sm:text-[15.5px] leading-[1.48] text-[#4A443D] font-medium">
+                        <p className="mt-2 text-[14.5px] sm:text-[15px] leading-[1.48] text-[#4A443D] font-medium">
                           {dish.desc}
                         </p>
                       </div>
@@ -653,15 +647,34 @@
                 ))}
               </div>
 
-              {/* Bottom Signature Pitcher Wave Accent */}
-              <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-6 pt-4">
-                <CamiloPitcherWave />
-                <div className="bg-[#E8DFD1] border-[2px] border-[#111111] rounded-2xl px-6 py-4 max-w-[460px]">
-                  <p className="text-[14px] font-extrabold text-[#111111]">
-                    🍊 ¿Buscás botellas de 1L, bidones de 5L o bolsas de panificados congelados para hornear en casa?
-                  </p>
-                  <a href="#reservas" onClick={() => setSelectedGoal('bidon')} className="inline-block mt-1.5 text-[13.5px] font-extrabold text-[#E86A1C] underline">
-                    Dejalo encargado por WhatsApp en 3 toques →
+              {/* Editorial Banner for 5L Orange Juice & Frozen Bakery */}
+              <div className="mt-12 bg-[#FAF6F0] border-[2px] border-[#111111] rounded-[24px] overflow-hidden shadow-[0_6px_0_#111111] grid grid-cols-1 lg:grid-cols-12 items-center">
+                <div className="lg:col-span-5 h-[230px] lg:h-[250px] border-b-[2px] lg:border-b-0 lg:border-r-[2px] border-[#111111] overflow-hidden bg-[#ECE4D7]">
+                  <img
+                    src="assets/menu/08_exprimido_bidon_naranja.jpg"
+                    alt="Botellas y Bidón 5 Litros Jugo de Naranja Exprimido Camilo"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+                <div className="lg:col-span-7 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                  <div className="max-w-[490px]">
+                    <span className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#E86A1C]">
+                      .CAMILO EN TU CASA O EVENTO.
+                    </span>
+                    <h3 className="font-display text-[24px] sm:text-[28px] text-[#111111] uppercase leading-[1.06] mt-1">
+                      BIDONES DE 5 LITROS & BOLLERÍA CONGELADA
+                    </h3>
+                    <p className="mt-2 text-[14.5px] text-[#4A443D] font-medium leading-relaxed">
+                      Llevate botellas de 500ml, 1 litro o nuestro clásico bidón de 5L de naranja recién exprimida con sello Camilo, más bolsas de medialunas y croissants listos para hornear.
+                    </p>
+                  </div>
+                  <a
+                    href="#reservas"
+                    onClick={() => setSelectedGoal('bidon')}
+                    className="flex-shrink-0 whitespace-nowrap inline-flex items-center justify-center gap-2 bg-[#111111] hover:bg-[#E86A1C] text-white font-extrabold text-[14px] px-6 py-3.5 rounded-full transition-colors"
+                  >
+                    <span>Encargar retiro</span>
+                    <span aria-hidden="true">→</span>
                   </a>
                 </div>
               </div>
@@ -670,10 +683,9 @@
           </section>
 
           {/* ==================================================================
-              5. EXPERIENCIA SUNSET COFFEE RAVE (Sección Nocturna de Alto Impacto)
+              6. EXPERIENCIA SUNSET COFFEE RAVE (Sección Nocturna de Alto Impacto)
           ================================================================== */}
           <section id="sunset" className="bg-[#111111] text-[#F3ECE1] py-16 sm:py-24 border-b-[2px] border-[#111111] relative overflow-hidden">
-            {/* Subtle Sunset Glow */}
             <div className="absolute -top-32 right-0 w-[520px] h-[520px] rounded-full bg-[#E86A1C]/20 blur-[120px] pointer-events-none" />
 
             <div className="max-w-[1360px] mx-auto px-5 sm:px-10 relative z-10">
@@ -682,10 +694,10 @@
                 {/* Left Copy */}
                 <div className="lg:col-span-6">
                   <div className="inline-flex items-center gap-2 bg-[#E86A1C] text-white text-[11.5px] font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full mb-5">
-                    <span>🎧 TODOS LOS VIERNES · DESDE LAS 18:00 HS</span>
+                    <span>TODOS LOS VIERNES · DESDE LAS 18:00 HS</span>
                   </div>
 
-                  <h2 className="font-display text-[38px] sm:text-[54px] leading-[0.98] uppercase text-white">
+                  <h2 className="font-display text-[38px] sm:text-[52px] leading-[0.98] uppercase text-white">
                     SUNSET CAMILO.
                     <br />
                     <span className="text-[#E86A1C]">COFFEE RAVE</span>
@@ -699,12 +711,12 @@
 
                   <div className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-[520px]">
                     <div className="bg-white/5 border border-white/15 rounded-2xl p-4">
-                      <span className="text-xs font-extrabold uppercase text-[#E86A1C]">📍 ROSARIO (ECHESORTU)</span>
+                      <span className="text-xs font-extrabold uppercase text-[#E86A1C]">ROSARIO · ECHESORTU</span>
                       <div className="text-[16px] font-extrabold text-white mt-0.5">Mendoza y Lavalle</div>
                       <div className="text-xs text-[#B8AFA0] mt-0.5">En simultáneo desde las 18:00 hs</div>
                     </div>
                     <div className="bg-white/5 border border-white/15 rounded-2xl p-4">
-                      <span className="text-xs font-extrabold uppercase text-[#E86A1C]">📍 FUNES (BARRIO CALMO)</span>
+                      <span className="text-xs font-extrabold uppercase text-[#E86A1C]">FUNES · BARRIO CALMO</span>
                       <div className="text-[16px] font-extrabold text-white mt-0.5">Médicos de Funes 1685</div>
                       <div className="text-xs text-[#B8AFA0] mt-0.5">Pérgola & terraza al atardecer</div>
                     </div>
@@ -714,15 +726,15 @@
                     <a
                       href="#reservas"
                       onClick={() => setSelectedGoal('rave')}
-                      className="inline-flex items-center gap-2.5 bg-[#E86A1C] hover:bg-[#CC560E] text-white font-extrabold text-[15px] px-7 py-4 rounded-full shadow-[0_8px_28px_rgba(232,106,28,0.35)] transition-all"
+                      className="whitespace-nowrap inline-flex items-center gap-2.5 bg-[#E86A1C] hover:bg-[#CC560E] text-white font-extrabold text-[15px] px-7 py-4 rounded-full shadow-[0_8px_28px_rgba(232,106,28,0.35)] transition-all"
                     >
                       <span>Reservar mesa para este Viernes</span>
-                      <span>→</span>
+                      <span aria-hidden="true">→</span>
                     </a>
                   </div>
                 </div>
 
-                {/* Right Editorial Cocktail Photo + Original Flyer */}
+                {/* Right Editorial Cocktail Photo */}
                 <div className="lg:col-span-6">
                   <div className="relative rounded-[26px] overflow-hidden border-2 border-white/20 shadow-2xl aspect-[4/3]">
                     <img
@@ -730,7 +742,7 @@
                       alt="Tragos Sunset Coffee Rave Camilo"
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
                     <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-4">
                       <div>
                         <div className="text-xs font-extrabold uppercase tracking-widest text-[#E86A1C]">
@@ -740,7 +752,7 @@
                           Aperol Spritz · Gin Tonic · Cynar · Fernet
                         </div>
                       </div>
-                      <span className="bg-white/15 backdrop-blur-md text-white text-xs font-extrabold px-3.5 py-1.5 rounded-full border border-white/20">
+                      <span className="whitespace-nowrap bg-white/15 backdrop-blur-md text-white text-xs font-extrabold px-3.5 py-1.5 rounded-full border border-white/20">
                         DJ Set Live
                       </span>
                     </div>
@@ -752,7 +764,7 @@
           </section>
 
           {/* ==================================================================
-              6. RESERVAS Y ENCARGOS EN 3 TOQUES (Visual, Limpio e Intuitivo)
+              7. RESERVAS Y ENCARGOS EN 3 TOQUES (Alineación perfecta & flecha SVG limpia)
           ================================================================== */}
           <section id="reservas" className="border-b-[2px] border-[#111111]">
             <div className="grid grid-cols-1 lg:grid-cols-12">
@@ -770,7 +782,7 @@
                     Sin demoras en mensajes directos de Instagram. Elegís tu opción y se genera el WhatsApp listo.
                   </p>
 
-                  {/* 1. Qué buscás */}
+                  {/* 1. Qué buscás (Zero vertical jump, consistent 2px borders across all 4 cards) */}
                   <div className="mt-8">
                     <h3 className="text-[15.5px] font-extrabold text-[#111111] mb-3">
                       1. Elegí qué buscás
@@ -785,8 +797,8 @@
                             onClick={() => setSelectedGoal(card.id)}
                             className={`rounded-[18px] overflow-hidden text-left transition-all cursor-pointer flex flex-col justify-between border-[2px] ${
                               active
-                                ? 'bg-[#FAF6F0] border-[#E86A1C] shadow-[0_4px_0_#E86A1C] -translate-y-0.5'
-                                : 'bg-[#FAF6F0] border-[#111111]/30 hover:border-[#111111]'
+                                ? 'bg-[#FAF6F0] border-[#E86A1C] shadow-[0_4px_0_#E86A1C]'
+                                : 'bg-[#FAF6F0] border-[#111111]/25 hover:border-[#111111]'
                             }`}
                           >
                             <div className="relative h-24 w-full overflow-hidden">
@@ -798,10 +810,10 @@
                               )}
                             </div>
                             <div className="p-3">
-                              <div className="text-[13px] font-extrabold text-[#111111] leading-tight">
+                              <div className="text-[13.5px] font-extrabold text-[#111111] leading-snug">
                                 {card.title}
                               </div>
-                              <div className="text-[11px] font-semibold text-[#5A5248] mt-0.5">
+                              <div className="text-[11.5px] font-semibold text-[#5A5248] mt-0.5 leading-snug">
                                 {card.sub}
                               </div>
                             </div>
@@ -820,7 +832,7 @@
                       {[
                         'Pte. Roca 1259 (Centro)',
                         'Mendoza y Lavalle (Echesortu)',
-                        'San Martín y O. Andrade',
+                        'San Martín y Andrade',
                         'Médicos de Funes 1685 (Funes)',
                       ].map((b) => {
                         const active = selectedBranch === b;
@@ -835,7 +847,7 @@
                                 : 'bg-[#FAF6F0] text-[#111111] hover:bg-[#E8DFD1]'
                             }`}
                           >
-                            {active && <span className="w-2.5 h-2.5 rounded-full bg-[#E86A1C]" />}
+                            {active && <span className="w-2.5 h-2.5 rounded-full bg-[#E86A1C] flex-shrink-0" />}
                             <span className="truncate">{b}</span>
                           </button>
                         );
@@ -843,35 +855,51 @@
                     </div>
                   </div>
 
-                  {/* 3. Personas y horario */}
+                  {/* 3. Personas y horario (100% Custom Styled Pills — Zero native OS ugly select widgets) */}
                   <div className="mt-7">
                     <h3 className="text-[15.5px] font-extrabold text-[#111111] mb-3">
                       3. Cantidad de personas y horario
                     </h3>
-                    <div className="flex flex-wrap gap-3">
-                      <select
-                        value={people}
-                        onChange={(e) => setPeople(e.target.value)}
-                        className="bg-[#FAF6F0] border-[2px] border-[#111111] rounded-full px-5 py-2.5 text-[14px] font-extrabold text-[#111111] cursor-pointer focus:outline-none"
-                      >
-                        <option>2 personas</option>
-                        <option>4 personas</option>
-                        <option>6 personas</option>
-                        <option>8 personas</option>
-                        <option>12+ personas (Grupo)</option>
-                      </select>
+                    <div className="space-y-2.5">
+                      <div className="flex flex-wrap gap-2">
+                        {['2 personas', '4 personas', '6 personas', '8 personas', '12+ Grupo'].map((p) => {
+                          const active = people === p;
+                          return (
+                            <button
+                              key={p}
+                              type="button"
+                              onClick={() => setPeople(p)}
+                              className={`whitespace-nowrap px-4 py-2 rounded-full text-[13px] font-extrabold border-[2px] border-[#111111] transition-all cursor-pointer ${
+                                active
+                                  ? 'bg-[#E86A1C] text-white shadow-[0_2px_0_#111111]'
+                                  : 'bg-[#FAF6F0] text-[#111111] hover:bg-[#E8DFD1]'
+                              }`}
+                            >
+                              {p}
+                            </button>
+                          );
+                        })}
+                      </div>
 
-                      <select
-                        value={hour}
-                        onChange={(e) => setHour(e.target.value)}
-                        className="bg-[#FAF6F0] border-[2px] border-[#111111] rounded-full px-5 py-2.5 text-[14px] font-extrabold text-[#111111] cursor-pointer focus:outline-none"
-                      >
-                        <option>Viernes 18:30 hs</option>
-                        <option>Viernes 19:30 hs</option>
-                        <option>Sábado 10:00 hs</option>
-                        <option>Sábado 17:30 hs</option>
-                        <option>Lunes a Viernes 13:00 hs</option>
-                      </select>
+                      <div className="flex flex-wrap gap-2">
+                        {['Viernes 18:30 hs', 'Viernes 19:30 hs', 'Sábado 10:00 hs', 'Sábado 17:30 hs', 'Lun a Vie 13:00 hs'].map((h) => {
+                          const active = hour === h;
+                          return (
+                            <button
+                              key={h}
+                              type="button"
+                              onClick={() => setHour(h)}
+                              className={`whitespace-nowrap px-4 py-2 rounded-full text-[13px] font-extrabold border-[2px] border-[#111111] transition-all cursor-pointer ${
+                                active
+                                  ? 'bg-[#111111] text-white shadow-[0_2px_0_#E86A1C]'
+                                  : 'bg-[#FAF6F0] text-[#111111] hover:bg-[#E8DFD1]'
+                              }`}
+                            >
+                              {h}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
 
@@ -887,7 +915,7 @@
                     <img src={activeGoalObj.img} alt={activeGoalObj.title} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
                     <div className="absolute bottom-3.5 left-4 right-4 text-center">
-                      <span className="text-[14px] sm:text-[15px] font-extrabold tracking-[0.06em] uppercase text-white">
+                      <span className="text-[13.5px] sm:text-[14.5px] font-extrabold tracking-[0.06em] uppercase text-white">
                         {activeGoalObj.caption}
                       </span>
                     </div>
@@ -911,29 +939,30 @@
                         const text = `Hola Camilo! Quiero coordinar ${activeGoalObj.msgText} en ${selectedBranch} (${hour}). Somos ${people}. Muchas gracias!`;
                         window.open(`https://wa.me/5493410000000?text=${encodeURIComponent(text)}`, '_blank');
                       }}
-                      className="mt-4 w-full bg-[#25B456] hover:bg-[#1E9B49] text-white font-extrabold text-[15.5px] py-3.5 px-6 rounded-full flex items-center justify-center gap-2 shadow-[0_6px_22px_rgba(37,180,86,0.35)] transition-all cursor-pointer"
+                      className="mt-4 w-full whitespace-nowrap bg-[#25B456] hover:bg-[#1E9B49] text-white font-extrabold text-[15px] sm:text-[15.5px] py-3.5 px-6 rounded-full flex items-center justify-center gap-2 shadow-[0_6px_22px_rgba(37,180,86,0.35)] transition-all cursor-pointer"
                     >
-                      <span>Abrir WhatsApp con este mensaje listo →</span>
+                      <span>Abrir WhatsApp con este mensaje listo</span>
+                      <span aria-hidden="true">→</span>
                     </a>
                   </div>
 
                   {/* Alianza SpeedWash x Camilo Card */}
                   <div className="bg-[#FAF6F0] text-[#111111] rounded-[20px] p-4 flex items-center justify-between gap-3 shadow-md">
-                    <div className="flex items-center gap-3.5">
+                    <div className="flex items-center gap-3.5 min-w-0">
                       <img
                         src="assets/posts/camilo_post_2.jpg"
                         alt="SpeedWash x Camilo"
-                        className="w-13 h-13 w-[54px] h-[54px] rounded-xl object-cover border border-[#111111]/20 flex-shrink-0"
+                        className="w-[54px] h-[54px] rounded-xl object-cover border border-[#111111]/20 flex-shrink-0"
                       />
-                      <div>
+                      <div className="min-w-0">
                         <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#0099EE]/15 text-[#0077BB]">
-                          PROMO MAÑANAS
+                          PROMO MAÑANAS · 8 A 11 HS
                         </span>
-                        <h4 className="text-[16px] font-extrabold text-[#111111] leading-tight mt-0.5">
+                        <h4 className="text-[15.5px] font-extrabold text-[#111111] leading-tight mt-0.5">
                           Alianza SpeedWash × Camilo
                         </h4>
-                        <p className="text-[12px] text-[#4A443D] font-medium">
-                          Lun a Vie 8 a 11 hs — Lavá tu auto y desayuná gratis
+                        <p className="text-[12px] text-[#4A443D] font-medium truncate">
+                          Lavá tu auto y desayuná gratis en Camilo
                         </p>
                       </div>
                     </div>
@@ -949,7 +978,7 @@
           </section>
 
           {/* ==================================================================
-              7. NUESTRAS 4 CASAS (Rosario & Funes · Pet Friendly)
+              8. NUESTRAS 4 CASAS (Divisores 100% alineados en las 4 columnas)
           ================================================================== */}
           <section id="casas" className="py-16 sm:py-22 bg-[#F3ECE1]">
             <div className="max-w-[1360px] mx-auto px-5 sm:px-10">
@@ -978,31 +1007,34 @@
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
                 {SUCURSALES.map((s) => (
                   <div
                     key={s.num}
-                    className="editorial-card bg-[#FAF6F0] border-[2px] border-[#111111] rounded-[22px] p-6 flex flex-col justify-between shadow-[0_5px_0_#111111]"
+                    className="editorial-card bg-[#FAF6F0] border-[2px] border-[#111111] rounded-[22px] p-6 flex flex-col justify-between shadow-[0_5px_0_#111111] h-full"
                   >
                     <div>
-                      <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center justify-between gap-2 mb-4">
                         <span className="font-display text-lg text-[#111111]">{s.num}.</span>
                         <span
-                          className={`text-[11px] font-extrabold uppercase px-3 py-1 rounded-full border border-[#111111] ${
+                          className={`whitespace-nowrap text-[10.5px] font-extrabold uppercase px-3 py-1 rounded-full border border-[#111111] ${
                             s.accent ? 'bg-[#E86A1C] text-white' : 'bg-[#E8DFD1] text-[#111111]'
                           }`}
                         >
                           {s.badge}
                         </span>
                       </div>
-                      <h3 className="text-[22px] font-extrabold text-[#111111] leading-tight">
+                      <h3 className="text-[19px] xl:text-[20.5px] font-extrabold text-[#111111] leading-snug">
                         {s.name}
                       </h3>
-                      <p className="text-[13.5px] font-bold text-[#E86A1C] mt-1">
+                      <p className="text-[13px] font-bold text-[#E86A1C] mt-1">
                         {s.area}
                       </p>
-                      <p className="text-[13px] font-semibold text-[#4A443D] mt-4 pt-3 border-t border-[#111111]/15">
-                        🕒 {s.hours}
+                    </div>
+
+                    <div className="pt-3 mt-5 border-t border-[#111111]/15">
+                      <p className="text-[12.5px] font-semibold text-[#4A443D] whitespace-nowrap">
+                        Horario: {s.hours}
                       </p>
                     </div>
                   </div>
@@ -1013,7 +1045,7 @@
           </section>
 
           {/* ==================================================================
-              8. FOOTER DE MARCA
+              9. FOOTER DE MARCA (Anillo crema en logo sobre fondo oscuro)
           ================================================================== */}
           <footer className="bg-[#111111] text-[#D8CFC2] py-10 px-5 sm:px-10 border-t-[2px] border-[#111111]">
             <div className="max-w-[1360px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -1021,7 +1053,7 @@
                 <img
                   src="assets/logo_oficial.jpg"
                   alt="Camilo Café Artesanal"
-                  className="w-11 h-11 rounded-full object-cover border border-white/20"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-[#F3ECE1]/40 shadow-md"
                 />
                 <div>
                   <div className="text-white font-extrabold text-sm">CAMILO · Café Artesanal</div>
